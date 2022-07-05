@@ -1,0 +1,145 @@
+{{> head title="CASH.TITLE" }}
+
+<div class="container" style="font-size: 0.9em;">
+
+  <header>
+    <!-- headings  -->
+    <div class="row">
+
+      {{> enterpriseDetails }}
+
+      <div class="col-xs-5 text-right">
+        <h3 style="margin: 0px;">
+          <span class="text-uppercase">
+            {{#with payment}}
+              {{#if is_caution}}
+                {{translate "CASH.CAUTION_PAYMENT"}}
+              {{else}}
+                {{translate "FORM.LABELS.INVOICE_PAYMENT"}}
+              {{/if}}
+            {{/with}}
+          </span> <br>
+          <strong>{{payment.reference}}</strong> <br>
+        </h3>
+
+        <div>
+          {{translate "REPORT.PRODUCED_ON"}} <time datetime="{{metadata.timestamp}}">{{date metadata.timestamp}}</time>
+          {{translate "REPORT.BY"}} {{metadata.user.username}}
+        </div>
+
+        {{#if metadata.enterprise.settings.enable_barcodes}}
+          <small>{{> barcode value=payment.barcode}}</small>
+        {{/if}}
+      </div>
+    </div>
+
+    <!-- client and user details  -->
+    <div class="row" style="border: 1px solid #ccc; padding: 5px; margin-bottom: 15px; margin-top: 10px;">
+      <div class="col-xs-6">
+        <span class="text-capitalize">{{translate 'FORM.LABELS.CLIENT'}}</span>: <strong>{{patient.reference}}</strong> <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.NAME'}}</span>: {{patient.display_name}} <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.GROUP'}}</span>: {{patient.debtor_group_name}} <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.HOSPITAL_FILE_NR'}}</span>: <strong>{{patient.hospital_no}}</strong>
+      </div>
+      <div class="col-xs-6">
+        <span class="text-capitalize">{{translate 'FORM.LABELS.PAYMENT'}}</span>: <strong>{{payment.reference}}</strong> <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.AMOUNT'}}</span>: <strong>{{currency payment.amount payment.currency_id}}</strong> <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.DATE'}}</span>: {{date payment.date}} <br>
+         <span class="text-capitalize">{{translate 'FORM.LABELS.CREATED_AT'}}</span>: {{date payment.created_at}} <br>
+        {{#if hasRate}}
+          <span class="text-capitalize">{{translate 'FORM.LABELS.EXCHANGE_RATE'}} {{currency rate payment.currency_id}}</span> <br>
+        {{/if}}
+        <span class="text-capitalize">{{translate "TABLE.COLUMNS.CREATED_BY"}}</span>: {{user.display_name}}
+      </div>
+    </div>
+  </header>
+
+  <!-- describe the payment -->
+  <p>{{payment.description}}</p>
+
+  <!-- list of items paid -->
+  <table class="table table-condensed table-report">
+    <thead>
+      <tr>
+        {{#with payment}}
+          {{#if is_caution}}
+            <th>{{translate "CASH.CAUTION"}}</th>
+          {{else}}
+            <th>{{translate "FORM.LABELS.INVOICE"}}</th>
+            <th>{{translate "FORM.LABELS.SERVICE"}}</th>
+          {{/if}}
+        {{/with}}
+        <th class="text-right">{{translate "FORM.LABELS.AMOUNT"}}</th>
+      </tr>
+    </thead>
+    <tbody>
+       {{#with payment}}
+          {{#if is_caution}}
+            <tr>
+              <td>{{ translate "CASH.CREDIT_PATIENT_ACCOUNT"}}</td>
+              <td class="text-right"> {{currency amount currency_id}} </td>
+
+            </tr>
+          {{/if}}
+        {{/with}}
+
+      {{#each payment.items as |item| }}
+        <tr>
+          <td>{{item.reference}}</td>
+          {{#unless  ../payment.is_caution}}
+            <td>{{item.serviceName}}</td>
+          {{/unless }}
+          <td class="text-right">{{currency item.amount ../payment.currency_id}}</td>
+        </tr>
+        <tr>
+          <td colspan="2" class="text-right">{{translate "TABLE.COLUMNS.REMAINING_BALANCE"}}</td>
+          <td style="text-align : right;">{{currency item.balance ../enterprise.currency_id}}</td>
+        </tr>
+        {{#if ../hasRate}}
+        <tr>
+          <td colspan="3" style="text-align : right">({{currency item.exchangedBalance ../payment.currency_id}})</td>
+        </tr>
+        {{/if}}
+      {{/each}}
+      <tr style="border:none !important">
+        <td colspan="3" style="border-top: none !important">.</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        {{#if payment.is_caution}}
+          <th>{{translate "FORM.LABELS.TOTAL"}}</th>
+        {{else}}
+          <th colspan="2">{{translate "FORM.LABELS.TOTAL"}}</th>
+        {{/if }}
+          <th class="text-right">{{currency payment.amount payment.currency_id}}</th>
+      </tr>
+
+      <!-- the balance only makes sense to show if the debtor is paying an invoice -->
+      {{#unless payment.is_caution}}
+        <tr>
+          <th colspan="2">{{translate "FORM.LABELS.DEBTOR_BALANCE_REMAINING"}}</th>
+          <th class="text-right">{{currency debtorTotalBalance enterprise.currency_id}}</th>
+        </tr>
+      {{/unless }}
+    </tfoot>
+  </table>
+
+  <h4>
+    <u>{{translate 'FORM.LABELS.SIGNATURE'}}s</u>
+  </h4>
+
+  <div class="row">
+    <div class="col-xs-5">
+      {{translate "FORM.LABELS.CASHIER"}} <br />
+      <br />
+      <hr/>
+    </div>
+    <div class="col-xs-offset-2 col-xs-5">
+      {{translate "FORM.LABELS.CLIENT"}} <br />
+      <br />
+      <hr/>
+    </div>
+  </div>
+  <script>JsBarcode('.barcode').init();</script>
+</div>

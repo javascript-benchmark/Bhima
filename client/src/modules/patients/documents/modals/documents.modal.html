@@ -1,0 +1,89 @@
+<div class="modal-header">
+  <ol class="headercrumb">
+    <li>
+      <span class="fa fa-user"></span>
+      <span translate>FORM.LABELS.PATIENT</span>
+    </li>
+    <li class="title">{{ $ctrl.patient.reference }}</li>
+    <li>
+      <span translate>FORM.LABELS.DOCUMENT</span>
+      <span class="label label-primary" translate>PATIENT_DOCUMENT.UPLOAD</span>
+    </li>
+  </ol>
+</div>
+
+<div class="modal-body">
+  <form class="form" name="documentForm" novalidate>
+
+    <div class="form-group">
+      <label class="control-label" for="title" translate>PATIENT_DOCUMENT.DOCUMENT_TITLE</label>
+      <input
+        class="form-control"
+        type="text"
+        name="title"
+        autocomplete="off"
+        ng-model="$ctrl.title"
+        required>
+    </div>
+
+    <!-- thumbnail  -->
+    <div ng-if="$ctrl.file && $ctrl.isImage" class="upload-thumbnail">
+      <img id="upload_thumbnail" ngf-src="{{ '$ctrl.thumbnail' }}">
+    </div>
+    
+
+    <!-- progress bar  -->
+    <div class="progress" ng-show="$ctrl.file.progress >= 0">
+      <div class="progress-bar progress-bar-success progress-bar-striped active"
+        style="width:{{$ctrl.file.progress}}%"
+        ng-bind="$ctrl.file.progress + '%'">
+      </div>
+    </div>
+
+    <div style="margin-top: 10px;" class="row">
+      <div class="form-group col-xs-8 col-md-10"
+        ng-class="{ 'has-error' : $ctrl.documentError }">
+        <input type="file"
+          class="form-control input-sm"
+          ngf-select="$ctrl.setThumbnail($ctrl.file)"
+          name="file"
+          ng-model="$ctrl.file">
+
+        <div class="help-block" data-error-message ng-show="$ctrl.documentError">
+          <i class="fa fa-warning"></i> <span translate>PATIENT_DOCUMENT.INVALID_DOCUMENT</span>
+        </div>
+      </div>
+
+      <!-- dismiss button  -->
+      <div class="col-xs-2">
+        <button
+          class="btn btn-danger btn-sm"
+          ng-disabled="!$ctrl.file"
+          ng-click="$ctrl.dismiss($ctrl.file)">
+          <span class="fa fa-trash"></span> <span translate>FORM.BUTTONS.DISMISS</span>
+        </button>
+      </div>
+    </div>
+
+
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-default"
+    data-method="close"
+    ng-click="$ctrl.close()" translate>
+    FORM.BUTTONS.CLOSE
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    data-method="submit"
+    ng-disabled="!$ctrl.title || $ctrl.uploadState === 'uploading'"
+    ng-click="$ctrl.submit(documentForm)"
+    translate>
+    FORM.BUTTONS.SUBMIT
+  </button>
+</div>

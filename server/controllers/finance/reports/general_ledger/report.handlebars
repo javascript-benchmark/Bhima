@@ -1,0 +1,135 @@
+{{> head title="TREE.GENERAL_LEDGER"}}
+
+<body>
+
+  {{> header}}
+
+  <!-- body  -->
+  <div class="row">
+    <div class="col-xs-12">
+
+      <!-- page title  -->
+      <h3 class="text-center text-uppercase"><strong>{{translate 'TREE.GENERAL_LEDGER'}}</strong></h3>
+      <h4 class="text-center"><strong>{{ fiscal_year_label}}</strong></h4>
+
+      <!-- invoices listed  -->
+      <table class="table table-condensed table-report table-bordered">
+        <thead>
+          <tr class="text-capitalize text-center" style="background-color: #ddd;">
+            <th>{{translate 'TABLE.COLUMNS.ACCOUNT'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.LABEL'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.BALANCE'}}</th>
+            <th>{{translate 'FORM.LABELS.OPENING_BALANCE'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.JANUARY'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.FEBRUARY'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.MARCH'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.APRIL'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.MAY'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.JUNE'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.JULY'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.AUGUST'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.SEPTEMBER'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.OCTOBER'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.NOVEMBER'}}</th>
+            <th>{{translate 'TABLE.COLUMNS.DATE_MONTH.DECEMBER'}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each rows}}
+            <tr {{#if isTitleAccount}}style="font-weight:bold;"{{/if}}>
+              <td>{{number}}</td>
+              <td style="padding-left: {{padLeft}}px;">{{label}}</td>
+              <td class="text-right">{{debcred balance ../metadata.enterprise.currency_id}}</td>
+              <td class="text-right">
+                {{#if balance0}}
+                  {{debcred balance0 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance1}}
+                  {{debcred balance1 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance2}}
+                  {{debcred balance2 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance3}}
+                  {{debcred balance3 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance4}}
+                  {{debcred balance4 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance5}}
+                  {{debcred balance5 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance6}}
+                  {{debcred balance6 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance7}}
+                  {{debcred balance7 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance8}}
+                  {{debcred balance8 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance9}}
+                  {{debcred balance9 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance10}}
+                  {{debcred balance10 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance11}}
+                  {{debcred balance11 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if balance12}}
+                  {{debcred balance12 ../metadata.enterprise.currency_id}}
+                {{/if}}
+              </td>
+            </tr>
+          {{else}}
+            {{> emptyTable columns=16}}
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="2">{{translate "FORM.LABELS.TOTAL"}}</th>
+            <th>{{debcred footer.balance metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance0 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance1 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance2 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance3 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance4 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance5 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance6 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance7 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance8 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance9 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance10 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance11 metadata.enterprise.currency_id}}</th>
+            <th>{{debcred footer.balance12 metadata.enterprise.currency_id}}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,26 @@
+<div class="ui-grid-cell-contents text-right" uib-dropdown dropdown-append-to-body data-row="{{ row.entity.reference }}">
+  <a uib-dropdown-toggle href data-action="open-dropdown-menu">
+    <span translate>FORM.BUTTONS.ACTIONS</span>
+    <span class="caret"></span>
+  </a>
+
+  <ul data-row-menu="{{ row.entity.reference }}" class="dropdown-menu-right" bh-dropdown-menu-auto-dropup uib-dropdown-menu>
+    <li class="bh-dropdown-header">{{row.entity.reference}}</li>
+    <li>
+      <a data-method="edit-record" ui-sref="employeeEdit({uuid : row.entity.uuid})" href>
+        <span class="fa fa-edit"></span> <span translate>TABLE.COLUMNS.EDIT</span>
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a data-method="record" ui-sref="patientRecord({ patientUuid : row.entity.patient_uuid })" href>
+        <span class="fa fa-book"></span> <span translate>EMPLOYEE.HOSPITAL_DATA</span>
+      </a>
+    </li>
+    <li>
+      <a data-method="financialActivities" ng-href="reports/finance/financial_patient/{{row.entity.patient_uuid}}?lang={{grid.appScope.languageKey}}" target="_blank">
+        <span class="fa fa-file-text-o"></span> <span translate>FORM.LABELS.VIEW_FINANCIAL_ACT</span>
+      </a>
+    </li>
+  </ul>
+</div>

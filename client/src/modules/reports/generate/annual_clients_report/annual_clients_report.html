@@ -1,0 +1,70 @@
+<bh-report-preview
+  ng-if="ReportConfigCtrl.previewGenerated"
+  source-document="ReportConfigCtrl.previewResult"
+  on-clear-callback="ReportConfigCtrl.clearPreview()"
+  on-save-callback="ReportConfigCtrl.requestSaveAs()">
+</bh-report-preview>
+
+<div ng-show="!ReportConfigCtrl.previewGenerated">
+<div class="row">
+  <div class="col-md-12">
+    <h3 class="text-capitalize" translate>REPORT.CLIENTS.TITLE</h3>
+    <p class="text-info" translate>REPORT.CLIENTS.DESCRIPTION</p>
+  </div>
+</div>
+
+<div class="row" style="margin-top : 10px">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span translate>REPORT.UTIL.OPTIONS</span>
+      </div>
+
+      <div class="panel-body">
+        <form name="ConfigForm" bh-submit="ReportConfigCtrl.preview(ConfigForm)" novalidate autocomplete="off">
+
+          <!--select the period by a date-->
+          <bh-fiscal-year-select
+            fiscal-id="ReportConfigCtrl.reportDetails.fiscalId"
+            on-select-fiscal-callback ="ReportConfigCtrl.onSelectFiscal(fiscalYear)">
+          </bh-fiscal-year-select>
+
+          <bh-currency-select
+            currency-id="ReportConfigCtrl.reportDetails.currencyId"
+            on-change="ReportConfigCtrl.onSelectCurrency(currency)">
+          </bh-currency-select>
+
+          <bh-yes-no-radios
+            label="REPORT.CLIENTS.HIDE_LOCKED_CLIENTS"
+            value="ReportConfigCtrl.reportDetails.hideLockedClients"
+            name="hideLockedClients"
+            help-text="REPORT.CLIENTS.HIDE_LOCKED_CLIENTS_HELP_TEXT"
+            on-change-callback="ReportConfigCtrl.onHideLockedClientsToggle(value)">
+          </bh-yes-no-radios>
+
+          <bh-yes-no-radios
+            label="REPORT.CLIENTS.INCLUDE_CASH_CLIENTS"
+            value="ReportConfigCtrl.reportDetails.includeCashClients"
+            name="includeCashClients"
+            help-text="REPORT.CLIENTS.INCLUDE_CASH_CLIENTS_HELP_TEXT"
+            on-change-callback="ReportConfigCtrl.onIncludeCashClientsToggle(value)">
+          </bh-yes-no-radios>
+
+          <!--preview-->
+          <bh-loading-button loading-state="ConfigForm.$loading">
+            <span translate>REPORT.UTIL.PREVIEW</span>
+          </bh-loading-button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <bh-cron-email-report
+      report-id="17"
+      report-form="ConfigForm"
+      report-details="ReportConfigCtrl.reportDetails"
+      on-select-report="ReportConfigCtrl.onSelectCronReport(report)">
+    </bh-cron-email-report>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="flex-header">
+  <div class="bhima-title">
+    <ol class="headercrumb">
+      <li class="static" translate> TREE.ADMIN </li>
+      <li class="title" translate> DEPOT.TITLE </li>
+    </ol>
+
+    <div class="toolbar">
+      <div class="toolbar-item">
+        <button class="btn btn-default text-capitalize" id="create" ng-click="DepotCtrl.createDepot()" data-method="create">
+          <span class="fa fa-plus"></span> <span translate>DEPOT.ADD_DEPOT</span>
+        </button>
+      </div>
+      <bh-search-button on-click="DepotCtrl.search()"></bh-search-button>
+      <bh-filter-toggle on-toggle="DepotCtrl.toggleFilter()"></bh-filter-toggle>
+    </div>
+  </div>
+</div>
+
+<div class="flex-util bh-filter-bar">
+  <bh-filters
+    filters="DepotCtrl.latestViewFilters"
+    on-remove-filter="DepotCtrl.onRemoveFilter(filter)">
+  </bh-filters>
+</div>
+
+<!-- main content -->
+<div class="flex-content">
+  <div class="container-fluid">
+    <div
+      id="depot-grid"
+      ui-grid="DepotCtrl.gridOptions"
+      class="grid-util-full-height"
+      ui-grid-auto-resize
+      ui-grid-resize-columns
+      ui-grid-tree-view>
+
+      <bh-grid-loading-indicator
+        loading-state="DepotCtrl.loading"
+        empty-state="DepotCtrl.gridOptions.data.length === 0"
+        error-state="DepotCtrl.hasError">
+      </bh-grid-loading-indicator>
+    </div>
+  </div>
+</div>

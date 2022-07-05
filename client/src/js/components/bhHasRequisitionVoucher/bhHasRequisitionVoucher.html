@@ -1,0 +1,26 @@
+<ng-form name="HasRequisitionForm">
+  <bh-yes-no-radios
+    label="REQUISITION.DOES_REQUISITION_EXIST"
+    value="$ctrl.requisitionVoucherExist"
+    name="requisitionVoucherExist"
+    id="requisitionVoucherExist"
+    help-text="REQUISITION.DOES_REQUISITION_EXIST_HELP"
+    on-change-callback="$ctrl.onChangeVoucherExist(value)">
+  </bh-yes-no-radios>
+
+  <!-- reference -->
+  <div class="form-group" ng-if="$ctrl.requisitionVoucherExist">
+    <!-- Requisition -->
+    <bh-requisition-select
+      requisition-uuid="$ctrl.requisitionReference"
+      requestor-uuid="$ctrl.requestor"
+      required="true"
+      disabled="$ctrl.requisitionDisabled"
+      on-select-callback="$ctrl.onSelectRequisition(requisition)">
+    </bh-requisition-select>
+
+    <div class="help-block" ng-show="$ctrl.message">
+      <p ng-class="$ctrl.classeLabel" translate>{{ $ctrl.message }}</p>
+    </div>
+  </div>
+</ng-form>

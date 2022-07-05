@@ -1,0 +1,77 @@
+<bh-report-preview
+  ng-if="ReportConfigCtrl.previewGenerated"
+  source-document="ReportConfigCtrl.previewResult"
+  on-clear-callback="ReportConfigCtrl.clearPreview()"
+  on-save-callback="ReportConfigCtrl.requestSaveAs()">
+</bh-report-preview>
+
+<div ng-show="!ReportConfigCtrl.previewGenerated">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 translate>REPORT.STOCK_VALUE.TITLE</h3>
+      <p class="text-info" translate>REPORT.STOCK_VALUE.DESCRIPTION</p>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top : 10px">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span translate>REPORT.UTIL.OPTIONS</span>
+        </div>
+
+        <div class="panel-body">
+
+        <form name="ConfigForm" bh-submit="ReportConfigCtrl.preview(ConfigForm)" novalidate autocomplete="off">
+
+          <!-- select depot -->
+          <bh-depot-select
+            depot-uuid="ReportConfigCtrl.depot.uuid"
+            on-select-callback="ReportConfigCtrl.onSelectDepot(depot)"
+            required="true">
+            <bh-clear on-clear="ReportConfigCtrl.clear('depot')"></bh-clear>
+          </bh-depot-select>
+
+          <!-- choose date until  -->
+          <bh-date-editor
+            label="FORM.LABELS.UNTIL_DATE"
+            limit-min-fiscal
+            date-value="ReportConfigCtrl.dateTo"
+            on-change="ReportConfigCtrl.onDateChange(date)">
+          </bh-date-editor>
+
+           <!-- the currency to be used in the footer -->
+          <bh-currency-select
+           currency-id="ReportConfigCtrl.currency_id"
+           on-change="ReportConfigCtrl.onSelectCurrency(currency)">
+          </bh-currency-select>
+
+          <hr>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-true-value="1" ng-false-value="0"
+                ng-model="ReportConfigCtrl.excludeZeroValue"
+                ng-change="ReportConfigCtrl.onExcludeZeroValue()">
+              <span translate>REPORT.STOCK_VALUE.EXCLUDE_INVENTORIES_ZERO_VALUE</span>
+            </label>
+          </div>
+
+          <!-- preview -->
+          <bh-loading-button loading-state="ConfigForm.$loading">
+            <span translate>REPORT.UTIL.PREVIEW</span>
+          </bh-loading-button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <bh-cron-email-report
+        report-key="stock_value"
+        report-form="ConfigForm"
+        report-details="ReportConfigCtrl.reportDetails"
+        on-select-report="ReportConfigCtrl.onSelectCronReport(report)">
+      </bh-cron-email-report>
+    </div>
+  </div>
+</div>

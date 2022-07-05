@@ -1,0 +1,27 @@
+<fieldset
+  ng-form="PeriodForm"
+  novalidate
+  bh-period-selection>
+
+  <div class="form-group"
+    ng-class="{ 'has-error' : PeriodForm.$submitted && PeriodForm.period.$invalid }">
+    <label class="control-label" translate>
+      {{ $ctrl.label }}
+    </label>
+
+    <ng-transclude></ng-transclude>
+    <select
+      class="form-control"
+      ng-model="$ctrl.selectedPeriod"
+      name="period"
+      ng-options="period as period.hrLabel for period in $ctrl.periods track by period.id"
+      ng-change="$ctrl.onChange($ctrl.selectedPeriod)"
+      ng-disabled="$ctrl.disable"
+      ng-required="!$ctrl.disable">
+      <option value="" disabled translate>FORM.SELECT.PERIOD</option>
+    </select>
+    <div class="help-block" ng-messages="PeriodForm.$error" ng-show="PeriodForm.$submitted">
+      <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+    </div>
+  </div>
+</fieldset>

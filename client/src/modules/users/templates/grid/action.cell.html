@@ -1,0 +1,52 @@
+<div class="ui-grid-cell-contents text-right"
+  uib-dropdown
+  dropdown-append-to-body
+  uib-dropdown-toggle
+  data-row="{{row.entity.display_name}}">
+  <a href data-action="open-dropdown-menu">
+    <span translate>FORM.BUTTONS.ACTIONS</span>
+    <span class="caret"></span>
+  </a>
+
+  <ul data-row-menu="{{row.entity.display_name}}" class="dropdown-menu-right" bh-dropdown-menu-auto-dropup uib-dropdown-menu>
+    <li class="bh-dropdown-header">{{row.entity.display_name}}</li>
+
+    <li>
+      <a data-method="edit-record" ui-sref="users.edit({ id : row.entity.id })" href>
+        <i class="fa fa-edit"></i> <span translate>FORM.BUTTONS.EDIT</span>
+      </a>
+    </li>
+    <li>
+      <a data-method="depot" ui-sref="users.depotManagement({ id : row.entity.id })" href>
+        <i class="fa fa-cubes"></i> <span translate>FORM.BUTTONS.DEPOT_MANAGEMENT</span>
+      </a>
+    </li>
+    <li>
+      <a data-method="cashbox" ui-sref="users.cashBoxManagement({ id: row.entity.id })" href>
+        <i class="fa fa-briefcase"></i> <span translate>FORM.BUTTONS.CASHBOX_MANAGEMENT</span>
+      </a>
+    </li>
+    <li>
+      <a data-method="assign_roles" ng-click="grid.appScope.editRoles(row.entity)" href>
+        <i class="fa fa-edit"></i><span translate>FORM.LABELS.EDIT_ROLE</span>
+      </a>
+    </li>
+    <li class="divider"></li>
+
+    <li ng-if="!row.entity.deactivated">
+      <a data-method="deactivate" ng-click="grid.appScope.activatePermissions(row.entity, 1, 'FORM.DIALOGS.CONFIRM_DEACTIVATION')" href>
+        <span class="text-danger">
+          <i class="fa fa-lock"></i> <span translate>FORM.LABELS.DEACTIVATE</span>
+        </span>
+      </a>
+    </li>
+
+    <li ng-if="row.entity.deactivated">
+      <a data-method="activate" ng-click="grid.appScope.activatePermissions(row.entity, 0, 'FORM.DIALOGS.CONFIRM_ACTIVATION')" href>
+        <span class="text-danger">
+          <i class="fa fa-unlock"></i><span translate>FORM.LABELS.ACTIVATE</span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>

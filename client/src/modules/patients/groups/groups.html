@@ -1,0 +1,42 @@
+<div class="flex-header">
+  <div class="bhima-title">
+    <ol class="headercrumb">
+      <li class="static" translate>TREE.ADMIN</li>
+      <li class="title" translate>PATIENT_GROUP.TITLE</li>
+    </ol>
+
+   <div class="toolbar">
+     <div class="toolbar-item">
+      <button class="btn btn-default text-capitalize" ng-click="PatientGroupCtrl.createUpdateGroupModal()" data-method="create">
+        <span class="fa fa-plus"></span>
+        <span translate>PATIENT_GROUP.ADD_PATIENT_GROUP</span>
+      </button>
+     </div>
+     <div class="toolbar-item">
+        <button ng-class="{ 'btn-info' : PatientGroupCtrl.gridOptions.enableFiltering }" class="btn btn-default" data-method="filter" ng-click="PatientGroupCtrl.toggleInlineFilter()">
+          <i class="fa fa-filter"></i>
+        </button>
+      </div>
+   </div>
+  </div>
+</div>
+
+<!-- main content -->
+<div class="flex-content">
+    <div class="container-fluid">
+      <div
+        id="roles-grid"
+        class="grid-full-height"
+        ui-grid="PatientGroupCtrl.gridOptions"
+        ui-grid-auto-resize
+        ui-grid-resize-columns
+        ui-grid-move-columns>
+  
+        <bh-grid-loading-indicator
+          loading-state="PatientGroupCtrl.loading"
+          empty-state="PatientGroupCtrl.gridOptions.data.length === 0">
+        </bh-grid-loading-indicator>
+      </div>
+    </div>
+  </div>
+  

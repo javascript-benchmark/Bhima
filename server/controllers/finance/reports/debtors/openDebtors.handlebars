@@ -1,0 +1,53 @@
+{{> head title="REPORT.OPEN_DEBTORS.TREE"}}
+
+<body>
+  <main class="container">
+    {{> header }}
+
+    <h3 class="text-center text-uppercase">
+      <strong>{{translate "REPORT.OPEN_DEBTORS.TREE"}}</strong>
+    </h3>
+
+    <h4 class="text-center text-uppercase">
+      {{#if details.limitDate}}{{date details.reportDateLimit}} - {{/if}}
+      {{date this.timestamp }}
+    </h4>    
+
+    <!-- margin is the cell size -->
+    <section>
+      <table class="table table-condensed table-report table-bordered">
+        <thead>
+          <tr class="text-capitalize text-center" style="background-color: #ddd;">
+            <th>{{translate "FORM.LABELS.REFERENCE"}}</th>
+            <th>{{translate "FORM.LABELS.PATIENT"}}</th>
+            {{#if details.showDetailedView}}<th>{{translate "TABLE.COLUMNS.LAST_INVOICE"}}</th>{{/if}}
+            {{#if details.showDetailedView}}<th>{{translate "TABLE.COLUMNS.LAST_PAYMENT"}}</th>{{/if}}
+            <th class="text-center">{{translate "TABLE.COLUMNS.TOTAL_DEBT"}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each debtors as | debtor |}}
+            <tr>
+              <td>{{debtor.reference}}</td>
+              <td>{{debtor.display_name }}</td>
+              {{#if ../details.showDetailedView}}<td>{{date debtor.latestInvoiceDate}}</td>{{/if}}
+              {{#if ../details.showDetailedView}}<td>{{date debtor.latestCashDate}}</td>{{/if}}
+              <td class="text-right">{{currency debtor.balance ../metadata.enterprise.currency_id}}</td>
+            </tr>
+          {{else}}
+            {{> emptyTable columns=5}}
+          {{/each}}
+        </tbody>
+        {{#if aggregates}}
+          <tfoot>
+            <tr style="background-color: #ddd;">
+              <th colspan="2">{{translate "TABLE.COLUMNS.TOTAL"}} {{aggregates.numDebtors}} {{translate "TABLE.AGGREGATES.RECORDS"}}</th>
+              {{#if details.showDetailedView}}<th colspan="2"></th>{{/if}}
+              <th class="text-right">{{currency aggregates.balance metadata.enterprise.currency_id}}</th>
+            </tr>
+          </tfoot>
+        {{/if}}
+      </table>
+    </section>
+  </main>
+</body>

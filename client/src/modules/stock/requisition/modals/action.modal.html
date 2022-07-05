@@ -1,0 +1,91 @@
+<form
+  name="ModalForm"
+  bh-submit="$ctrl.submit(ModalForm)"
+  data-modal="stock-requisition-create"
+  novalidate>
+
+  <div class="modal-header">
+    <ol class="headercrumb">
+      <li class="static" translate>REQUISITION.STOCK_REQUISITION</li>
+
+      <li ng-if="$ctrl.isCreateState" class="title" translate>FORM.LABELS.CREATE</li>
+      <li ng-if="!$ctrl.isCreateState" class="title" translate>FORM.LABELS.UPDATE</li>
+    </ol>
+  </div>
+
+  <div class="modal-body">
+    <!-- Date -->
+    <bh-date-editor
+      date-value="$ctrl.model.date"
+      on-change="$ctrl.onDateChange(date)">
+    </bh-date-editor>
+
+    <!-- service or depot -->
+    <bh-service-or-depot
+      uuid="$ctrl.model.requestor_uuid"
+      label="REQUISITION.RECEIVER"
+      on-select-callback="$ctrl.onSelectRequestor(requestor)"
+      ng-value="requestor"
+      required="true">
+    </bh-service-or-depot>
+
+    <!-- inventories -->
+    <div class="form-group">
+      <label translate>FORM.LABELS.ARTICLES</label>
+
+      <div style="margin-bottom: 5px;" class="space-between">
+        <bh-add-item callback="$ctrl.addItem(numItem)" disable="true"></bh-add-item>
+
+        <button ng-disabled="!$ctrl.enableAutoSuggest || $ctrl.loadingSuggest" ng-click="$ctrl.autoSuggestInventories()" type="button" class="btn btn-success">
+          <span ng-hide="$ctrl.loadingSuggest"><i class="fa fa-cog"></i> <span translate>FORM.BUTTONS.AUTO_SUGGEST</span></span>
+          <span ng-show="$ctrl.loadingSuggest"><span class="fa fa-circle-o-notch fa-spin"></span> <span translate>FORM.INFO.LOADING</span></span>
+        </button>
+      </div>
+
+      <div
+        id="stock-requisition-grid-articles"
+        ui-grid="$ctrl.gridOptions"
+        ui-grid-resize-columns
+        ui-grid-auto-resize>
+        <bh-grid-loading-indicator
+          loading-state="$ctrl.loadingSuggest"
+          empty-state="$ctrl.gridOptions.data.length === 0"
+          error-state="$ctrl.hasError">
+        </bh-grid-loading-indicator>
+      </div>
+
+      <div style="margin-top:5px;">
+        <span style="margin-right: 10px;" class="text-success"><i class="fa fa-thumbs-up"></i>&nbsp;<span translate>REQUISITION.INVENTORY_AVAILABLE</span></span>
+        <span style="margin-right: 10px;" class="text-warning"><i class="fa fa-warning"></i>&nbsp;<span translate>REQUISITION.INVENTORY_AVAILABLE_WITH_NOT_ENOUGH_QUANTITY</span></span>
+        <span class="text-danger"><i class="fa fa-thumbs-down"></i>&nbsp;<span translate>REQUISITION.INVENTORY_NOT_AVAILABLE</span></span>
+      </div>
+    </div>
+
+    <!-- depot -->
+    <div id="depot-supplier" class="form-group">
+      <bh-depot-select
+        depot-uuid="$ctrl.model.depot_uuid"
+        filter-by-user-permission="true"
+        label="REQUISITION.DEPOT_SUPPLIER"
+        required="true"
+        exception="$ctrl.model.requestor_uuid"
+        on-select-callback="$ctrl.onSelectDepot(depot)">
+      </bh-depot-select>
+    </div>
+
+    <!-- note -->
+    <div class="form-group">
+      <label class="control-label" translate>FORM.LABELS.NOTE</label>
+      <textarea ng-model="$ctrl.model.description" class="form-control" name="description" id="description"></textarea>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$ctrl.cancel()" data-method="cancel" translate>
+      FORM.BUTTONS.CLOSE
+    </button>
+    <bh-loading-button loading-state="ModalForm.$loading" disabled="ModalForm.$loading">
+      <span translate>FORM.BUTTONS.SUBMIT</span>
+    </bh-loading-button>
+  </div>
+</form>

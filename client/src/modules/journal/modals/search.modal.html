@@ -1,0 +1,211 @@
+<form
+  name="ModalForm"
+  ng-submit="ModalCtrl.submit(ModalForm)"
+  data-modal="journal-search"
+  novalidate>
+
+  <div class="modal-header">
+    <ol class="headercrumb">
+      <li class="static" translate> {{ ModalCtrl.options.title || 'TREE.POSTING_JOURNAL' }} </li>
+      <li class="title" translate> FORM.INFO.SEARCH </li>
+    </ol>
+  </div>
+
+  <div class="modal-body" style="padding : 0px;">
+    <uib-tabset>
+      <uib-tab index="0" data-custom-filter-tab heading="{{ 'FORM.LABELS.SEARCH_QUERIES' | translate}}">
+        <!-- acting body class="tab-body" -->
+        <div class="tab-body">
+
+        <div class="form-group" ng-if="!ModalCtrl.hidePostedOption">
+          <label class="control-label" translate>TRANSACTIONS.VERIFIED_TRANSACTIONS</label>
+          <bh-clear on-clear="ModalCtrl.clear('includeNonPosted')"></bh-clear>
+          <div class="checkbox">
+            <label>
+              <input ng-model="ModalCtrl.searchQueries.includeNonPosted" ng-true-value="1" ng-false-value="0" type="checkbox"> <span translate>TRANSACTIONS.INCLUDE_POSTED_TRANSACTIONS_DETAIL</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.trans_id.$invalid }">
+          <label class="control-label" translate>
+            FORM.LABELS.TRANSACTION
+          </label>
+          <bh-clear on-clear="ModalCtrl.clear('trans_id')"></bh-clear>
+          <input type="text" class="form-control" name="trans_id" ng-model="ModalCtrl.searchQueries.trans_id">
+          <div class="help-block" ng-messages="ModalForm.trans_id.$error" ng-show="ModalForm.$submitted">
+            <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+          </div>
+        </div>
+
+        <!-- hasDefaultAccount is used to set a default account selection behavior -->
+        <div ng-if="!ModalCtrl.hasDefaultAccount">
+          <bh-account-select
+            account-id="ModalCtrl.searchQueries.account_id"
+            name="account_id"
+            on-select-callback="ModalCtrl.onSelectAccount(account)"
+            exclude-title-accounts="true"
+            required="0">
+            <bh-clear on-clear="ModalCtrl.clear('account_id')"></bh-clear>
+          </bh-account-select>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.hrRecord.$invalid }">
+          <label class="control-label" translate>TABLE.COLUMNS.RECORD</label>
+          <bh-clear on-clear="ModalCtrl.clear('hrRecord')"></bh-clear>
+          <input type="text" class="form-control" name="hrRecord" ng-model="ModalCtrl.searchQueries.hrRecord">
+          <div class="help-block" ng-messages="ModalForm.hrRecord.$error" ng-show="ModalForm.$submitted">
+            <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.hrEntity.$invalid }">
+          <label class="control-label" translate>TABLE.COLUMNS.RECIPIENT</label>
+          <bh-clear on-clear="ModalCtrl.clear('hrEntity')"></bh-clear>
+          <input type="text" class="form-control" name="hrEntity" ng-model="ModalCtrl.searchQueries.hrEntity">
+          <div class="help-block" ng-messages="ModalForm.hrEntity.$error" ng-show="ModalForm.$submitted">
+            <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.hrReference.$invalid }">
+          <label class="control-label" translate>TABLE.COLUMNS.REFERENCE</label>
+          <bh-clear on-clear="ModalCtrl.clear('hrReference')"></bh-clear>
+          <input type="text" class="form-control" name="hrReference" ng-model="ModalCtrl.searchQueries.hrReference">
+          <div class="help-block" ng-messages="ModalForm.hrReference.$error" ng-show="ModalForm.$submitted">
+            <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+          </div>
+        </div>
+
+        <bh-transaction-type-select
+          on-change="ModalCtrl.onTransactionTypesChange(transactionTypes)"
+          transaction-type-ids="ModalCtrl.searchQueries.transaction_type_id">
+        </bh-transaction-type-select>
+
+        <!-- description fuzzy search -->
+        <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.description.$invalid }">
+          <label class="control-label" translate>
+            FORM.LABELS.DESCRIPTION
+          </label>
+          <bh-clear on-clear="ModalCtrl.clear('description')"></bh-clear>
+          <textarea
+            class="form-control"
+            name="description"
+            ng-model="ModalCtrl.searchQueries.description"
+            rows="3">
+          </textarea>
+          <div class="help-block" ng-messages="ModalForm.description.$error" ng-show="ModalForm.$submitted">
+            <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+          </div>
+        </div>
+
+        <bh-user-select
+          user-id="ModalCtrl.searchQueries.user_id"
+          name="user_id"
+          on-select-callback="ModalCtrl.onSelectUser(user)">
+          <bh-clear on-clear="ModalCtrl.clear('user_id')"></bh-clear>
+        </bh-user-select>
+
+        <bh-project-select
+          project-id="ModalCtrl.searchQueries.project_id"
+          name="project_id"
+          on-select-callback="ModalCtrl.onSelectProject(project)">
+          <bh-clear on-clear="ModalCtrl.clear('project_id')"></bh-clear>
+        </bh-project-select>
+
+        <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.amount.$invalid }">
+          <label class="control-label" translate>FORM.LABELS.AMOUNT</label>
+          <bh-clear on-clear="ModalCtrl.clear('amount')"></bh-clear>
+          <input type="number" class="form-control" name="amount" ng-model="ModalCtrl.searchQueries.amount">
+          <div class="help-block" ng-messages="ModalForm.amount.$error" ng-show="ModalForm.$submitted">
+            <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+          </div>
+        </div>
+
+        <!-- description fuzzy search -->
+        <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.comment.$invalid }">
+          <label class="control-label" translate>FORM.LABELS.COMMENT</label>
+          <bh-clear on-clear="ModalCtrl.clear('comment')"></bh-clear>
+          <textarea
+            class="form-control"
+            name="comment"
+            ng-model="ModalCtrl.searchQueries.comment"
+            rows="3">
+          </textarea>
+          <div class="help-block" ng-messages="ModalForm.comment.$error" ng-show="ModalForm.$submitted">
+            <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+          </div>
+        </div>
+
+        <bh-currency-select
+          required="false"
+          currency-id="ModalCtrl.searchQueries.currency_id"
+          on-change="ModalCtrl.onSetCurrency(currency)">
+          <bh-clear on-clear="ModalCtrl.clear('currency_id')"></bh-clear>
+        </bh-currency-select>
+
+        </div>
+      </uib-tab>
+
+      <uib-tab index="1" data-default-filter-tab heading="{{ 'FORM.LABELS.DEFAULTS' | translate }}">
+        <div class="tab-body">
+
+          <!--
+            hasDefaultAccount is used to set a default account selection
+            behavior in the Account Statement Module.
+          -->
+          <div ng-if="ModalCtrl.hasDefaultAccount">
+            <bh-account-select
+              account-id="ModalCtrl.defaultQueries.account_id"
+              name="account_id"
+              on-select-callback="ModalCtrl.onSelectAccount(account)"
+              exclude-title-accounts="true"
+              required="0">
+            </bh-account-select>
+          </div>
+
+          <!-- Full Transaction applies to the Journal, not the Account Statement -->
+          <div ng-if="!ModalCtrl.hasDefaultAccount">
+
+            <!-- Given this components architecture, `value` on onChangeCallback -->
+            <!-- refers to the ng-value of the currently selcted radio button -->
+            <bh-yes-no-radios
+              value ="ModalCtrl.defaultQueries.showFullTransactions"
+              name="showFullTransactions"
+              on-change-callback="ModalCtrl.toggleFullTransaction(value)"
+              label="POSTING_JOURNAL.SHOW_FULL_TRANSACTION_RECORDS"
+              help-text="POSTING_JOURNAL.SHOW_FULL_TRANSACTION_RECORDS_HELP">
+            </bh-yes-no-radios>
+          </div>
+
+          <!-- period selection -->
+          <!-- start period selection component -->
+          <bh-period-select
+            default-period="{{ModalCtrl.filters.period}}"
+            on-select-callback="ModalCtrl.onSelectPeriod(period)">
+          </bh-period-select>
+          <!-- end period selection component -->
+
+          <div class="form-group" ng-class="{ 'has-error' : ModalForm.limit.$invalid }">
+            <label class="control-label" translate>FORM.LABELS.LIMIT</label>
+            <input name="limit" type="number" min="0" bh-integer bh-max-integer class="form-control" ng-model="ModalCtrl.defaultQueries.limit" ng-change="ModalCtrl.onSelectLimit(ModalCtrl.defaultQueries.limit)">
+
+            <div class="help-block" ng-messages="ModalForm.limit.$error">
+              <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+            </div>
+          </div>
+        </div>
+      </uib-tab>
+    </uib-tabset>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="ModalCtrl.cancel()" data-method="cancel" translate>
+      FORM.BUTTONS.CLOSE
+    </button>
+
+    <button type="submit" class="btn btn-primary" data-method="submit" translate>
+      FORM.BUTTONS.SUBMIT
+    </button>
+  </div>
+</form>

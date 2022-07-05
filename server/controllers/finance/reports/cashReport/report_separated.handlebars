@@ -1,0 +1,121 @@
+{{> head title="TREE.CASH_REPORT" }}
+
+<div class="container">
+  {{> header}}
+
+  <div class="row">
+    <div class="col-xs-12">
+      <h3 class="text-center text-uppercase">
+        <strong>{{translate "TREE.CASH_REPORT"}}</strong>
+      </h3>
+      <h5 class="text-center text-uppercase">
+        {{ cashbox.label }} ({{ cashbox.symbol}})
+      </h5>
+      <h6 class="text-center text-uppercase">
+        {{date dateFrom }} - {{date dateTo }}
+      </h6>
+
+      <div class="text-right">
+        <strong>{{ translate "FORM.LABELS.OPENING_BALANCE" }} : {{debcred header.balance metadata.enterprise.currency_id}}</strong>
+      </div>
+
+      {{#if hasIncome }}
+        <h4>{{translate "FORM.LABELS.INCOME"}}</h4>
+        <table class="table table-condensed table-report">
+          <thead>
+            <tr style="background-color:#ddd;">
+              <th>{{ translate "TABLE.COLUMNS.DATE" }}</th>
+              <th>{{ translate "TABLE.COLUMNS.TRANSACTION_ID" }}</th>
+              <th>{{ translate "TABLE.COLUMNS.RECORD" }}</th>
+              <th style="min-width: 50%">{{ translate "TABLE.COLUMNS.DESCRIPTION"}}</th>
+              <th>{{ translate "TABLE.COLUMNS.SOURCE" }}</th>
+              <th>{{ translate "TABLE.COLUMNS.AMOUNT" }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each income as |txn|}}
+              <tr {{#unless txn.posted}}style="font-style: italic !important;"{{/unless}}>
+                <td>{{ date txn.trans_date }}</td>
+                <td>{{ txn.trans_id }}</td>
+                <td>{{ txn.document_reference }}</td>
+                <td style="white-space : nowrap;  text-overflow : ellipsis; overflow : hidden; max-width : 400px;" title="{{ txn.description }}">
+                  {{ txn.description }}
+                </td>
+                <td>{{translate txn.transactionType}}</td>
+                <td class="text-right">{{ currency txn.debit txn.currency_id}}</td>
+              </tr>
+            {{else}}
+              {{>emptyTable columns=6}}
+            {{/each}}
+          </tbody>
+          <tfoot>
+            <tr style="background-color:#ddd;">
+              <th colspan="5">{{ translate "TABLE.COLUMNS.TOTAL" }}</th>
+              <th class="text-right">
+                {{ currency footer.totals.debit cashbox.currency_id}}
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      {{/if}}
+
+      <br />
+
+      {{#if hasExpense}}
+        <h4>{{translate "FORM.LABELS.EXPENSE"}}</h4>
+        <table class="table table-condensed table-report">
+          <thead>
+            <tr style="background-color:#ddd;">
+              <th>{{ translate "TABLE.COLUMNS.DATE" }}</th>
+              <th>{{ translate "TABLE.COLUMNS.TRANSACTION_ID" }}</th>
+              <th>{{ translate "TABLE.COLUMNS.RECORD" }}</th>
+              <th style="min-width: 50%">{{ translate "TABLE.COLUMNS.DESCRIPTION"}}</th>
+              <th>{{ translate "TABLE.COLUMNS.SOURCE" }}</th>
+              <th>{{ translate "TABLE.COLUMNS.AMOUNT" }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each expense as |txn|}}
+              <tr {{#unless txn.posted}}style="font-style: italic !important;"{{/unless}}>
+                <td>{{ date txn.trans_date }}</td>
+                <td>{{ txn.trans_id }}</td>
+                <td>{{ txn.document_reference }}</td>
+                <td style="white-space : nowrap;  text-overflow : ellipsis; overflow : hidden; max-width : 400px;" title="{{ txn.description }}">
+                  {{ txn.description }}
+                </td>
+                <td>{{translate txn.transactionType}}</td>
+                <td class="text-right">{{ currency txn.credit txn.currency_id}}</td>
+              </tr>
+            {{else}}
+              {{>emptyTable columns=6}}
+            {{/each}}
+          </tbody>
+          <tfoot>
+            <tr style="background-color:#ddd;">
+              <th colspan="5">{{ translate "TABLE.COLUMNS.TOTAL" }}</th>
+              <th class="text-right">
+                {{ currency footer.totals.credit cashbox.currency_id}}
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      {{/if}}
+
+      <br />
+
+      {{#if hasBoth}}
+        <p class="text-right">
+          <strong>{{translate "FORM.LABELS.INCOME"}} - {{translate "FORM.LABELS.EXPENSE"}}:</strong>
+          <span>{{debcred footer.totals.balance metadata.enterprise.currency_id}}</span>
+        </p>
+
+        <p class="text-right">
+          <strong>{{translate "TABLE.COLUMNS.BALANCE"}}:</strong>
+          <span>{{debcred footer.exchangedCumSum metadata.enterprise.currency_id}}</span>
+        </p>
+      {{/if}}
+
+      <br />
+    </div>
+  </div>
+</div>

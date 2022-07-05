@@ -1,0 +1,560 @@
+// These imports customize bootstrap's LESS files found in
+// node_modules/bootstrap/less/*.less
+// See the gulpfile's build process for more information
+
+// Core variables and mixins
+@import "variables.less";
+@import "mixins.less";
+
+// Reset and dependencies
+@import "normalize.less";
+// @import "print.less"; // removed to get rid of no-color
+@import "bhima-print.less";
+@import "glyphicons.less";
+
+// Core CSS
+@import "scaffolding.less";
+@import "type.less";
+@import "code.less";
+@import "grid.less";
+@import "tables.less";
+@import "forms.less";
+@import "buttons.less";
+
+// Components
+@import "component-animations.less";
+@import "dropdowns.less";
+@import "button-groups.less";
+@import "input-groups.less";
+@import "navs.less";
+@import "navbar.less";
+@import "breadcrumbs.less";
+@import "pagination.less";
+@import "pager.less";
+@import "labels.less";
+@import "badges.less";
+@import "jumbotron.less";
+@import "thumbnails.less";
+@import "alerts.less";
+@import "progress-bars.less";
+@import "media.less";
+@import "list-group.less";
+@import "panels.less";
+@import "responsive-embed.less";
+@import "wells.less";
+@import "close.less";
+
+// Components w/ JavaScript
+@import "modals.less";
+@import "tooltip.less";
+@import "popovers.less";
+@import "carousel.less";
+
+// Utility classes
+@import "utilities.less";
+@import "responsive-utilities.less";
+
+/**
+ * gutter width halfed for container padding, odd values cause overflow scroll
+ * bars with current application structure
+ */
+@grid-gutter-width: 10px;
+
+@border-radius-base: 2px;
+
+@ima-green:           #77a13f;
+@ima-dark-orange:     #e57b14;
+@ima-dark-blue:       #085484;
+@ima-light-orange:    #fdba64;
+@ima-light-blue:      #6fbdee;
+
+@ima-purple : #7859BF;
+
+/** @todo move all structure code into less with configurable variables */ /** * Application structure variables - these widths are used to determine how much
+ * space the tree navigation takes up in its `expanded` and `collapsed` states.
+ */
+@expanded-offset:  260px;
+@collapsed-offset: 56px;
+@nav-height:       51px;
+
+/* turn off horizontal resizing */
+textarea {
+  resize: vertical;
+  max-height: 250px;
+}
+
+/**
+ * Notifications
+ */
+growl-notifications {
+  width : 100%;
+  position : fixed;
+  top : 0px;
+  left : @collapsed-offset;
+  z-index : 1000;
+}
+
+.expanded > growl-notifications {
+  left : @expanded-offset;
+  width : calc(~'100% - (@{expanded-offset} - @{collapsed-offset})');
+}
+
+growl-notifications growl-notification {
+  background : #fff;
+  border-left : 5px solid #9A9A9A;
+  height : @nav-height;
+  padding : 15px 10px;
+  display : block;
+
+  /** @todo width calculation are a hack - the notification doesn't need to be fixed */
+  width : calc(~'100% - @{collapsed-offset}');
+}
+
+@modal-title-padding : 8px;
+@modal-inner-padding : 10px;
+
+.modal-content {
+  border-radius : @border-radius-small;
+}
+/**
+ * Make sure the input groups have nice validation
+ */
+.has-success .btn.btn-default,
+.has-success .input-group-addon {
+  color : @state-success-text;
+  border-color: @state-success-text;
+}
+
+.has-error .btn.btn-default,
+.has-error .input-group-addon {
+  color: @state-danger-text;
+  border-color: @state-danger-text;
+}
+
+.has-warning .btn.btn-default,
+.has-warning .input-group-addon {
+  color: @state-warning-text;
+  border-color: @state-warning-text;
+  background-color: @state-warning-bg;
+}
+
+/**
+ * remove the spinners (arrows) in inputs in chrome and firefox
+ */
+::-webkit-inner-spin-button { -webkit-appearance: none;}
+::-webkit-outer-spin-button { -webkit-appearance: none;}
+input[type=number] {-moz-appearance: textfield;}
+
+/**
+ * This overrides the `width` specification added by bootstrap at different
+ * screen sizes for the .container class. As the Tree navigation pushes the view
+ * if it is expanded BHIMA cannot gaurantee there is enough space for these widths,
+ * overriding this with max-width doesn't force the container to the specified size
+ */
+@media (min-width: 768px) {
+  .container {
+    max-width : 730px;
+    width : auto;
+  }
+}
+
+@media (min-width : 992px) {
+  .container {
+    max-width : 950px;
+    width : auto;
+  }
+}
+
+@media (min-width : 1200px) {
+  .container {
+    max-width : 1150px;
+    width : auto;
+  }
+}
+
+/**
+ * Slightly pad the bottom of elements.  Useful for the floating columns on top
+ * of each other on small screens.
+ */
+.pad-bottom {
+  padding-bottom : @grid-gutter-width / 2;
+}
+
+.label.label-emphasize{
+  background-color: @ima-purple;
+  color: #fff;
+}
+
+/* expert mode */
+/* @padding-base-vertical: 3px; */
+/* @padding-base-horizontal: 6px; */
+
+/* badges additions */
+.badge.badge-primary {
+  background-color: @label-primary-bg;
+  border-radius: @border-radius-base;
+}
+
+.badge.badge-danger {
+  background-color: @label-danger-bg;
+  border-radius: @border-radius-base;
+}
+
+.badge.badge-warning {
+  background-color: @label-warning-bg;
+  border-radius: @border-radius-base;
+}
+
+.badge.badge-success {
+  background-color: @label-success-bg;
+  border-radius: @border-radius-base;
+}
+
+.badge.badge-info {
+  background-color: @label-info-bg;
+  border-radius: @border-radius-base;
+}
+
+/** transaction things */
+
+.ui-grid-row .ui-grid-cell.transaction-edit {
+  background-color: @state-info-bg;
+  border-color: @btn-primary-border;
+  color: @state-info-text;
+}
+
+.ui-grid-row .ui-grid-cell.transaction-edit.transaction-edit-header  {
+  background-color: @btn-primary-bg;
+  border-color: @btn-primary-border;
+  color: @btn-primary-color;
+}
+
+.transaction-edit-header  a {
+  color: @btn-primary-color;
+}
+
+/* highlight */
+
+.ui-grid-row .ui-grid-cell.transaction-highlight {
+  border-color: @state-warning-border;
+}
+
+.ui-grid-row .ui-grid-cell.transaction-highlight.transaction-highlight-header {
+  background-color: @state-warning-bg;
+  border-color: @state-warning-border;
+  color: @state-warning-text;
+}
+
+.ui-grid-row .ui-grid-cell.transaction-invalid {
+  background-color: @state-danger-bg;
+  border-color: @btn-danger-border;
+  color: @state-danger-text;
+}
+
+.ui-grid-row .ui-grid-cell.transaction-invalid.transaction-invalid-header  {
+  background-color: @btn-danger-bg;
+  border-color: @btn-danger-border;
+  color: @btn-danger-color;
+}
+
+.transaction-invalid-header  a {
+  color: @btn-danger-color;
+}
+
+
+/* PDF report styles */
+
+.table-report {
+  font-size: 0.9em;
+}
+
+.table-report > thead > th {
+  font-size: 1.2em;
+}
+
+.table-report > tbody > tr > td,
+.table-report > tbody > tr > th,
+.table-report > thead > tr > th,
+.table-report > tfoot > tr > th,
+.table-report > tfoot > tr > td {
+  padding: 2px;
+}
+
+.table-report {
+  margin-bottom : 0;
+}
+
+.table-report > tbody > tr > td,
+.table-report > tbody > tr > th {
+  border: 1px solid black;
+}
+
+.table-report > thead > tr > th {
+  border-bottom: 1px solid #000;
+}
+.table-report > tfoot > tr > th {
+  border-top: 1px solid #000 !important;
+}
+
+.pills span {
+  margin : 1px 2px;
+}
+
+.pills span:first {
+  margin-left: 0;
+}
+
+/* New Label Outline styles */
+/* src: https://codepen.io/uimax/pen/ZpENPG */
+
+.label.label-outlined {
+  border-width: 1px;
+  border-style: solid;
+  background-color: transparent;
+}
+
+.label.label-outlined.label-primary {
+  border-color: @label-primary-bg;
+  color: @brand-primary;
+}
+
+.label.label-outlined.label-danger {
+  border-color: @label-danger-bg;
+  color: @state-danger-text;
+}
+
+.label.label-outlined.label-info {
+  border-color: @label-info-bg;
+  color: @state-info-text;
+}
+
+.label.label-outlined.label-warning {
+  border-color: @label-warning-bg;
+  color: @state-warning-text;
+}
+
+.label.label-outlined.label-success {
+  border-color: @label-success-bg;
+  color: @state-success-text;
+}
+
+/*  flash for newly edited or created rows */
+@keyframes highlight-flash {
+  from { background: @btn-info-bg; }
+  to { background: transparent; }
+}
+
+.ui-grid-row .ui-grid-cell.row-highlight {
+  animation-name: highlight-flash;
+  animation-duration: 1.5s;
+}
+
+/*  flash for error rows */
+@keyframes error-flash {
+  from { background: @btn-danger-bg; }
+  to { background: transparent; }
+}
+
+.ui-grid-row .ui-grid-cell.row-error {
+  animation-name: error-flash;
+  animation-duration: 2s;
+}
+
+/* These classes need to be "!important" because ui-grid's header cell template */
+/* prioritizes its own classes over ours, for some reason */
+.ui-grid-header-cell-error {
+  background-color: @btn-danger-bg !important;
+  border-color: @btn-danger-border !important;
+  color: white;
+}
+
+.ui-grid-header-cell-primary{
+  background-color: @btn-primary-bg !important;
+  border-color: @btn-primary-border !important;
+  color: white;
+}
+
+/* large button as menu */
+.bg-ima-dark-blue { background: @ima-dark-blue; }
+.bg-ima-dark-blue .value,
+.bg-ima-dark-blue .uilabel
+{ color: white !important; }
+
+/* experimental usage of the search-modal */
+.search-modal {
+  overflow : auto;
+  max-height:600px;
+  padding:0px;
+}
+
+/* this is included at the top of the modal */
+.search-modal-header {
+  box-shadow : 0px 2px 4px -4px black;
+  z-index : 1000;
+}
+
+/* hack to get ui-selects to overflow over bootstrap's modals with */
+/* append-to-body="true" */
+body > .ui-select-bootstrap.open {
+  z-index: 1100;
+}
+
+.ui-grid-exporter-csv-link {
+  display : none;
+}
+
+.pad-alert {
+  border-radius : 0px;
+  padding-left : 10px;
+  padding-right : 10px;
+  padding-top : 10px;
+  padding-bottom : 10px;
+  margin-bottom : 10px;
+}
+
+/**/
+.strength-meter {
+  position: relative;
+  height: 3px;
+  background: #DDD;
+  margin: 10px auto 20px;
+  border-radius: 3px;
+}
+
+.strength-meter:before,
+.strength-meter:after {
+  content: '';
+  height: inherit;
+  background: transparent;
+  display: block;
+  border-color: #FFF;
+  border-style: solid;
+  border-width: 0 5px 0 5px;
+  position: absolute;
+  width: 80px;
+  z-index: 10;
+}
+
+.strength-meter:before {
+  left: 70px;
+}
+
+.strength-meter:after {
+  right: 70px;
+}
+
+.strength-meter-fill {
+  background: transparent;
+  height: inherit;
+  position: absolute;
+  width: 0;
+  border-radius: inherit;
+  transition: width 0.5s ease-in-out, background 0.25s;
+}
+
+.strength-meter-fill[data-strength='0'] {
+  background: darkred;
+  width: 20%;
+}
+
+.strength-meter-fill[data-strength='1'] {
+  background: orangered;
+  width: 40%;
+}
+
+.strength-meter-fill[data-strength='2'] {
+  background: orange;
+  width: 60%;
+}
+
+.strength-meter-fill[data-strength='3'] {
+  background: yellowgreen;
+  width: 80%;
+}
+
+.strength-meter-fill[data-strength='4'] {
+  background: green;
+  width: 100%;
+}
+
+/* hack to get ui-grid to stop coloring inputs */
+div.ui-grid-cell .form-group input.form-control.ng-invalid {
+  border : 1px solid #ccc;
+}
+
+div.ui-grid-cell .form-group.has-error input.ng-invalid {
+  border : 1px solid #fc8f8f;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+/* note: panels must have position:relative set on them */
+.panel-overlay {
+  top: 0;
+  left: 0;
+  right : 0;
+  bottom : 0;
+  background-color: rgba(255,255,255, 0.95);
+  position : absolute;
+  z-index: 1000;
+}
+
+.panel-overlay-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.panel-overlay-text {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link {
+  cursor: pointer;
+}
+
+/* modal notify component */
+.bh-modal-notify {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 53px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+}
+.bh-modal-notify > i {
+  cursor: pointer;
+}
+
+/* extends .dropdown-header with .text-ellipsis and max-width */
+.bh-dropdown-header {
+	color: #777;
+	display: block;
+	font-size: 12px;
+	line-height: 1.42857143;
+  max-width:250px;
+	overflow: hidden;
+	padding: 3px 20px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

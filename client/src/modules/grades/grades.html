@@ -1,0 +1,38 @@
+<div class="flex-header">
+  <div class="bhima-title">
+    <ol class="headercrumb">
+      <li class="static" translate>TREE.ADMIN</li>
+      <li class="title" translate>GRADE.TITLE</li>
+    </ol>
+
+    <div class="toolbar">
+      <div class="toolbar-item">
+        <button class="btn btn-default text-capitalize" ui-sref="grades.create" data-method="create">
+          <span class="fa fa-plus"></span> <span class="hidden-xs" translate>GRADE.ADD_GRADE</span>
+        </button>
+      </div>
+
+      <bh-filter-toggle
+        on-toggle="GradeCtrl.toggleFilter()">
+      </bh-filter-toggle>
+    </div>
+  </div>
+</div>
+
+<!-- main content -->
+<div class="flex-content">
+  <div class="container-fluid">
+    <div
+      id="grade-grid"
+      class="grid-full-height"
+      ui-grid="GradeCtrl.gridOptions"
+      ui-grid-auto-resize>
+
+      <bh-grid-loading-indicator
+        loading-state="GradeCtrl.loading"
+        empty-state="GradeCtrl.gridOptions.data.length === 0"
+        error-state="GradeCtrl.hasError">
+      </bh-grid-loading-indicator>
+    </div>
+  </div>
+</div>

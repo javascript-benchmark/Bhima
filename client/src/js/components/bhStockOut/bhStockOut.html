@@ -1,0 +1,42 @@
+<div>
+  <bh-grid-loading-indicator loading-state="$ctrl.loading" error-state="$ctrl.hasError">
+  </bh-grid-loading-indicator>
+
+  <table
+    class="table table-condensed table-bordered"
+    ng-show="$ctrl.stockOutInventories.length > 0">
+    <thead>
+      <tr>
+        <th>
+          <span class="text-danger"
+            translate-values="{ total : $ctrl.stockOutInventories.length }"
+            translate="{{ 'STOCK.STOCK_OUT_WARNING' }}">
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat = "inventory in $ctrl.stockOutInventories | limitTo : 5">
+        <td>{{inventory.text}} (<u translate-attr="{ 'title' : inventory.stock_out_date_raw }">{{inventory.stock_out_date_parsed}}</u>)</td>
+      </tr>
+
+      <tr>
+        <td>
+          <span class="text-danger"
+            ng-show="($ctrl.stockOutInventories.length - 5) > 0"
+            translate-values="{ left : ($ctrl.stockOutInventories.length - 5)}"
+            translate="{{ 'STOCK.AND_MORE' }}">
+          </span>
+
+        <a ui-sref= "stockInventories({ filters : [
+          { key : 'period', value : 'allTime'},
+          { key : 'includeEmptyLot', value : 1 },
+          { key : 'depot_uuid', value : $ctrl.depot.uuid, displayValue: $ctrl.depot.text, cacheable:false },
+          { key : 'status', value : 'stock_out', displayValue: 'STOCK.STATUS.STOCK_OUT', cacheable:false },
+          { key : 'limit', value : 100000, cacheable:false }
+          ]})" translate>FORM.LABELS.SEE_ALL</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,108 @@
+<form name="ActionForm" bh-submit="$ctrl.submit(ActionForm)" novalidate>
+  <div class="modal-header">
+    <i class="fa fa-list"></i>
+    <span ng-if="$ctrl.isCreateState" translate>INVENTORY.ADD_GROUP</span>
+    <span ng-if="$ctrl.isUpdateState" translate>INVENTORY.EDIT_GROUP</span>
+  </div>
+
+  <div class="modal-body">
+    <div
+      class="form-group"
+      ng-class="{ 'has-error' : ActionForm.$submitted && ActionForm.name.$invalid }">
+      <label class="control-label" translate>FORM.LABELS.NAME</label>
+      <input ng-model="$ctrl.session.name"
+        class="form-control"
+        type="text"
+        name="name"
+        autocomplete="off"
+        translate-attr="{ placeholder: 'FORM.PLACEHOLDERS.NAME' }"
+        required>
+      <div class="help-block" ng-messages="ActionForm.name.$error" ng-show="ActionForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+
+    <div class="form-group"
+      ng-class="{ 'has-error' : ActionForm.$submitted && ActionForm.code.$invalid }">
+      <label class="control-label" translate>FORM.LABELS.CODE</label>
+      <input ng-model="$ctrl.session.code"
+        class="form-control"
+        type="text"
+        name="code"
+        autocomplete="off"
+        translate-attr="{ placeholder: 'FORM.PLACEHOLDERS.CODE' }"
+        required>
+      <div class="help-block" ng-messages="ActionForm.code.$error" ng-show="ActionForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+
+    <bh-account-select
+      data-sales-account
+      name="sales_account"
+      account-id="$ctrl.session.sales_account"
+      account-type-id="$ctrl.INCOME_ACCOUNT_TYPE_ID"
+      exclude-title-accounts="true"
+      required="$ctrl.enableAutoStockAccounting"
+      on-select-callback="$ctrl.onSelectSalesAccount(account)">
+      (<span translate>FORM.LABELS.SALE</span>)
+      <bh-clear on-clear="$ctrl.session.sales_account = null;"></bh-clear>
+    </bh-account-select>
+
+    <bh-account-select
+      data-stock-account
+      name="stock_account"
+      account-id="$ctrl.session.stock_account"
+      account-type-id="[$ctrl.ASSET_ACCOUNT_TYPE_ID, $CTRL.EQUITY_ACCOUNT_TYPE_ID]"
+      exclude-title-accounts="true"
+      required="$ctrl.enableAutoStockAccounting"
+      on-select-callback="$ctrl.onSelectStockAccount(account)">
+      (<span translate>FORM.LABELS.STOCK</span>)
+      <bh-clear on-clear="$ctrl.session.stock_account = null;"></bh-clear>
+    </bh-account-select>
+
+    <bh-account-select
+      data-cogs-account
+      name="cogs_account"
+      account-id="$ctrl.session.cogs_account"
+      account-type-id="$ctrl.EXPENSE_ACCOUNT_TYPE_ID"
+      exclude-title-accounts="true"
+      required="$ctrl.enableAutoStockAccounting"
+      on-select-callback="$ctrl.onSelectCOGSAccount(account)">
+      (<span translate>FORM.LABELS.CHARGE</span>)
+      <bh-clear on-clear="$ctrl.session.cogs_account = null;"></bh-clear>
+    </bh-account-select>
+
+    <div class="checkbox">
+      <label>
+       <input type="checkbox" name="unique_item" ng-model= "$ctrl.session.unique_item" ng-true-value="1" ng-false-value="0"/>
+       <span translate>INVENTORY.UNIQUE_ITEM</span>
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+       <input type="checkbox" name="tracking_consumption" ng-model= "$ctrl.session.tracking_consumption" ng-true-value="1" ng-false-value="0"/>
+       <span translate>STOCK.TRACK_CONSUMPTION</span>
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+       <input type="checkbox" name="tracking_expiration" ng-model= "$ctrl.session.tracking_expiration" ng-true-value="1" ng-false-value="0"/>
+       <span translate>STOCK.TRACK_EXPIRATION</span>
+      </label>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$ctrl.cancel()" translate>
+      FORM.BUTTONS.CANCEL
+    </button>
+
+    <bh-loading-button loading-state="ActionForm.$loading">
+      <span translate>FORM.BUTTONS.SUBMIT </span>
+    </bh-loading-button>
+  </div>
+</form>

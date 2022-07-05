@@ -1,0 +1,116 @@
+{{> head title="REPORT.STOCK.INVENTORY_REPORT" }}
+
+<body class="container-fluid">
+
+  {{> header}}
+
+  <!-- body -->
+  <div class="row">
+    <div class="col-xs-12">
+
+      <!-- page title  -->
+      <h2 class="text-center text-uppercase">
+        {{translate 'REPORT.STOCK.INVENTORY_REPORT'}}
+      </h2>
+
+      <h3 class="text-center">
+        {{#if depot.text}}{{depot.text}}<br>{{/if}}
+        {{#if inventory.code}}<strong>{{inventory.code}} - {{inventory.text}}</strong>{{/if}}
+      </h3>
+
+      <h4 class="text-center">
+        {{#if dateFrom}}{{date dateFrom}} - {{/if}}
+        {{#if dateTo}}{{date dateTo}}{{/if}}
+      </h4>
+
+      <br>
+
+      {{#unless isEnterpriseCurrency}}
+        <div class="alert alert-warning">
+          <p>{{translate "REPORT.REPORT_ACCOUNTS.WARN_CURRENCY"}}</p>
+        </div>
+      {{/unless}}
+
+      <!-- list of data  -->
+      <table class="table table-condensed table-report">
+        <thead>
+          <tr style="background-color:#ddd;">
+            <th colspan={{#if depot.text}}"4"{{else}}"5"{{/if}}></th>
+            <th class="text-center" colspan="3">{{translate 'REPORT.STOCK.ENTRIES'}}</th>
+            <th class="text-center" colspan="3">{{translate 'REPORT.STOCK.EXITS'}}</th>
+            <th class="text-center" colspan="3">{{translate 'REPORT.STOCK.STOCKS'}}</th>
+          </tr>
+          <tr style="background-color:#ddd;">
+            <th class="text-center" style="border-right: 1px solid #000;">{{translate 'TABLE.COLUMNS.REFERENCE'}}</th>
+            <th class="text-center" style="border-right: 1px solid #000;">{{translate 'TABLE.COLUMNS.DATE'}}</th>
+            {{#unless depot.text}}
+            <th class="text-center" style="border-right: 1px solid #000;">{{translate 'STOCK.DEPOT'}}</th>
+            {{/unless}}
+            <th class="text-center" style="border-right: 1px solid #000;">{{translate 'STOCK.FLUX'}}</th>
+            <th class="text-center" style="border-right: 1px solid #000;">{{translate 'STOCK.LOT'}}</th>
+
+            <th class="text-center">{{translate 'STOCK.QUANTITY'}}</th>
+            <th class="text-center">{{translate 'STOCK.UNIT_COST'}}</th>
+            <th class="text-center" style="border-right: 1px solid #000;">{{translate 'TABLE.COLUMNS.TOTAL'}}</th>
+
+            <th class="text-center">{{translate 'STOCK.QUANTITY'}}</th>
+            <th class="text-center">{{translate 'STOCK.UNIT_COST'}}</th>
+            <th class="text-center" style="border-right: 1px solid #000;">{{translate 'TABLE.COLUMNS.TOTAL'}}</th>
+
+            <th class="text-center">{{translate 'STOCK.QUANTITY'}}</th>
+            <th class="text-center">{{translate 'STOCK.UNIT_COST'}}</th>
+            <th class="text-center">{{translate 'TABLE.COLUMNS.TOTAL'}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#if header}}
+            <tr {{#if header.hasNegativeValues}}class="bg-danger text-danger"{{/if}}>
+              <td style="border-left: 1px solid #000; border-right:1px solid #000; border-bottom: 1px solid #000;" colspan={{#if depot.text}}"10"{{else}}"11"{{/if}} class="text-center"><b>{{translate 'REPORT.OPENING_BALANCE'}}</b></td>
+              <td style="border-right: 1px solid #000; border-bottom: 1px solid #000;" class="text-right" {{#unless header.hasNegativeValues}}style="background-color:#efefef;"{{/unless}}><b>{{header.quantity}}</b></td>
+              <td style="border-right: 1px solid #000; border-bottom: 1px solid #000;" class="text-right" {{#unless header.hasNegativeValues}}style="background-color:#efefef;"{{/unless}}><b>{{currency header.unit_cost currencyId 4}}</b></td>
+              <td style="border-right: 1px solid #000; border-bottom: 1px solid #000;" class="text-right" {{#unless header.hasNegativeValues}}style="background-color:#efefef;border-right: 1px solid #000;"{{/unless}}><b>{{currency header.value currencyId}}</b></td>
+            </tr>
+          {{/if}}
+
+          {{#each rows}}
+            <tr {{#if hasNegativeValues}}class="bg-danger text-danger"{{/if}}>
+              <td style="border-left: 1px solid #000;">{{reference}}</td>
+              <td style="border-right: 1px solid #000;">{{timestamp date}}</td>
+              {{#unless ../depot.text}}
+              <td style="border-right: 1px solid #000;">{{depot_text}}</td>
+              {{/unless}}
+              <td style="border-left: 1px solid #000;">{{translate flux}}</td>
+              <td style="border-left: 1px solid #000;">{{label}}</td>
+
+              {{!-- entry --}}
+              <td class="text-right">{{#if entry.quantity}}{{entry.quantity}}{{/if}}</td> <td class="text-right">{{#if entry.unit_cost}}{{currency entry.unit_cost currencyId 4}}{{/if}}</td>
+              <td class="text-right" style="border-right: 1px solid #000;">{{#if entry.value}}{{currency entry.value ../currencyId}}{{/if}}</td>
+
+              {{!-- exit --}}
+              <td class="text-right">{{#if exit.quantity}}{{exit.quantity}}{{/if}}</td>
+              <td class="text-right">{{#if exit.unit_cost}}{{currency exit.unit_cost currencyId 4}}{{/if}}</td>
+              <td class="text-right" style="border-right: 1px solid #000;">{{#if exit.value}}{{currency exit.value ../currencyId}}{{/if}}</td>
+
+              {{!-- stock --}}
+              <td class="text-right" {{#unless hasNegativeValues}}style="background-color:#efefef;"{{/unless}}>{{stock.quantity}}</td>
+              <td class="text-right" {{#unless hasNegativeValues}}style="background-color:#efefef;"{{/unless}}>{{currency stock.unit_cost currencyId 4}}</td>
+              <td class="text-right" style="{{#unless hasNegativeValues}}background-color:#efefef;{{/unless}} border-right: 1px solid #000;">{{currency stock.value ../currencyId}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <tr class="text-right" style="font-weight: bold; background-color: #efefef; border-top: 1px solid #000;">
+            <th colspan={{#if depot.text}}"4"{{else}}"5"{{/if}}></th>
+            <th class="text-right">{{totals.entry}}</th> <th></th>
+            <th class="text-right">{{currency totals.entryValue currencyId}}</th>
+            <th class="text-right">{{totals.exit}}</th> <th></th>
+            <th class="text-right">{{currency totals.exitValue currencyId}}</th>
+            <th class="text-right">{{result.stock.quantity}}</th>
+            <th class="text-right">{{currency result.stock.unit_cost currencyId 4}}</th>
+            <th class="text-right">{{currency result.stock.value currencyId}}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</body>

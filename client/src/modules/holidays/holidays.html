@@ -1,0 +1,39 @@
+<div class="flex-header">
+  <div class="bhima-title">
+    <ol class="headercrumb">
+      <li class="static" translate> TREE.ADMIN </li>
+      <li class="title" translate> HOLIDAY.TITLE </li>
+    </ol>
+
+    <div class="toolbar">
+      <div class="toolbar-item">
+        <button class="btn btn-default text-capitalize" ui-sref="holidays.create" data-method="create">
+          <span class="fa fa-plus"></span> <span translate>HOLIDAY.ADD_HOLIDAY</span>
+        </button>
+      </div>
+
+      <bh-filter-toggle
+        on-toggle="HolidayCtrl.toggleFilter()">
+      </bh-filter-toggle>
+
+    </div>
+  </div>
+</div>
+
+<!-- main content -->
+<div class="flex-content">
+  <div class="container-fluid">
+    <div
+      id="holiday-grid"
+      class="grid-full-height"
+      ui-grid="HolidayCtrl.gridOptions"
+      ui-grid-auto-resize>
+
+      <bh-grid-loading-indicator
+        loading-state="HolidayCtrl.loading"
+        empty-state="HolidayCtrl.gridOptions.data.length === 0"
+        error-state="HolidayCtrl.hasError">
+      </bh-grid-loading-indicator>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,118 @@
+{{> head title="TREE.OPERATING_ACCOUNT" }}
+
+<body class="container-fluid">
+  {{> header}}
+
+  <!-- body -->
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- page title  -->
+      <h3 class="text-center text-uppercase">
+        <strong>{{translate 'TREE.OPERATING_ACCOUNT'}}</strong>
+      </h3>
+
+      <h5 style="margin:15px; font-weight:bold" class="text-center text-uppercase">
+        {{date this.dateFrom}} - {{date this.dateTo}}
+      </h5>
+      <h5 class="text-center">
+        {{#if this.rate}}
+          {{translate 'EXCHANGE.EXCHANGE_RATES'}} :
+          {{currency 1 this.firstCurrency}} = {{currency this.rate this.secondCurrency}}
+          <i>(<span>{{translate 'EXCHANGE.AT_THE_DATE'}}</span> {{date this.dateTo}})</i>
+        {{/if}}
+      </h5>
+      <table class="table table-condensed table-report table-bordered">
+        <tbody>
+          <tr>
+            <th class="text-center">
+              {{translate 'REPORT.EXPENSE'}}
+            </th>
+            <th class="text-center">
+              {{translate 'REPORT.INCOME'}}
+            </th>
+          </tr>
+          <tr style="padding:0;margin:0;border:none;">
+            <td style="padding:0;margin:0;border:none;">
+              <table class="table table-condensed table-report table-bordered">
+                <thead>
+                  <th>{{translate 'FORM.LABELS.ACCOUNT_NUMBER'}}</th>
+                  <th>{{translate 'FORM.LABELS.LABEL'}}</th>
+                  <th>{{translate 'FORM.LABELS.AMOUNT'}}</th>
+                  <th>%</th>
+                </thead>
+                <tbody>
+                  {{#each this.expense}}
+                  <tr>
+                    <td class="{{#if isParent}}text-bold{{/if}} text-right">{{number}}</td>
+                    <td {{#if isParent}}class="text-bold"{{/if}} style="padding-left: calc({{depth}} * 10px);">
+                      {{label}}
+                    </td>
+                    <td class="text-right">{{debcred amount ../currencyId}}</td>
+                    <td class="text-right">{{percent}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </td>
+            <td style="padding:0;margin:0;border:none;">
+              <table class="table table-condensed table-report table-bordered">
+                <thead>
+                  <th>{{translate 'FORM.LABELS.ACCOUNT_NUMBER'}}</th>
+                  <th>{{translate 'FORM.LABELS.LABEL'}}</th>
+                  <th>{{translate 'FORM.LABELS.AMOUNT'}}</th>
+                  <th>%</th>
+                </thead>
+                <tbody>
+                  {{#each this.revenue}}
+                  <tr>
+                    <td class="{{#if isParent}}text-bold{{/if}} text-right">{{number}}</td>
+                    <td {{#if isParent}}class="text-bold"{{/if}} style="padding-left: calc({{depth}} * 10px);">
+                      {{label}}
+                    </td>
+                    <td class="text-right">{{debcred amount ../currencyId}}</td>
+                    <td class="text-right">{{percent}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <br>
+      <br>
+      <table class="table table-condensed table-report table-bordered">
+        <tr>
+          <th>
+          </th>
+          <th class="text-center">
+            {{translate 'FORM.LABELS.TOTAL_EXPENSES'}}
+          </th>
+           <th class="text-center">
+             {{translate 'FORM.LABELS.TOTAL_INCOMES'}}
+          </th>
+        </tr>
+         <tr>
+          <th class="text-center">
+            {{translate 'FORM.LABELS.TOTAL'}}
+          </th>
+          <td class="text-right">
+            {{debcred this.totalExpense currencyId}}
+          </td>
+           <td class="text-right">
+            {{debcred this.totalIncome currencyId}}
+          </td>
+        </tr>
+        <tr>
+          <th class="text-center">
+            {{translate 'FORM.LABELS.RESULT'}}
+          </th>
+          <th class="text-right" colspan=2>
+            {{currency this.total currencyId}}
+          </th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>

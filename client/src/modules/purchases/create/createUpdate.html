@@ -1,0 +1,260 @@
+<div class="flex-header">
+  <div class="bhima-title">
+    <ol class="headercrumb">
+      <li class="static" translate>TREE.INVENTORY</li>
+      <li class="title" translate>PURCHASES.PAGE_TITLE</li>
+    </ol>
+  </div>
+</div>
+
+<div class="flex-content">
+  <div class="container">
+     <!-- top note panel for the purchase order details inspired by the patient invoice page's ergonomics -->
+     <form
+        name="PurchaseOrderForm"
+        autocomplete="off"
+        autocapitalize="off"
+        autocorrect="off"
+        ng-submit="PurchaseCtrl.submit(PurchaseOrderForm)"
+        novalidate>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="col-md-6">
+                  <bh-supplier-select
+                    supplier-uuid="PurchaseCtrl.order.details.supplier_uuid"
+                    on-select-callback="PurchaseCtrl.order.setSupplier(supplier)">
+                  </bh-supplier-select>
+
+                  <bh-date-editor
+                    date-value="PurchaseCtrl.order.details.date"
+                    on-change="PurchaseCtrl.order.onDateChange(date)">
+                  </bh-date-editor>
+
+                  <div class="form-group">
+                    <label class="control-label">
+                      <span translate>FORM.LABELS.PAYMENT_METHOD</span>
+                      <span
+                        class="text-info fa fa-info-circle"
+                        uib-popover-template="'typePopover.tmpl.html'"
+                        popover-placement="right"
+                        popover-append-to-body="true"
+                        popover-trigger="mouseenter">
+                      </span>
+                    </label>
+
+                    <div class="radio" style="margin-top:0;">
+                      <label>
+                        <input type="radio" name="paymentMethod" id="on-purchase" value="FORM.LABELS.ON_PURCHASE" ng-model="PurchaseCtrl.order.details.payment_method" required>
+                        <span translate>FORM.LABELS.ON_PURCHASE</span>
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="paymentMethod" id="on-delivery" value="FORM.LABELS.ON_DELIVERY" ng-model="PurchaseCtrl.order.details.payment_method" required>
+                        <span translate>FORM.LABELS.ON_DELIVERY</span>
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="paymentMethod" id="other" value="FORM.LABELS.OTHER" ng-model="PurchaseCtrl.order.details.payment_method" required>
+                        <span translate>FORM.LABELS.OTHER</span>
+                      </label>
+                    </div>
+
+                    <div class="help-block" ng-messages="PurchaseOrderForm.paymentMethod.$error" ng-show="PurchaseOrderForm.$submitted">
+                      <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="col-md-6">
+                  <div
+                    class="form-group"
+                    style="margin-bottom: 0.5em"
+                    ng-show="PurchaseCtrl.hasMultipleCurrencies"
+                    ng-class="{ 'has-error' : PurchaseCtrl.$submitted && PurchaseCtrl.currency.$invalid }">
+                    <label class="control-label" translate>FORM.LABELS.CURRENCY</label>
+
+                    <ui-select
+                      name="currency"
+                      ng-model="PurchaseCtrl.rate.currency"
+                      ng-change="PurchaseCtrl.selectCurrency()"
+                      required>
+                      <ui-select-match placeholder="{{ 'FORM.PLACEHOLDERS.CURRENCY' | translate }}">
+                        <span>{{ PurchaseCtrl.format($select.selected.id) }}</span>
+                      </ui-select-match>
+                      <ui-select-choices
+                        ui-select-focus-patch
+                        repeat="currency as currency in PurchaseCtrl.currencies">
+                        <span ng-bind-html="PurchaseCtrl.format(currency.id) | highlight:$select.search"></span>
+                      </ui-select-choices>
+                    </ui-select>
+
+                    <div class="help-block"
+                      ng-messages="PurchaseCtrl.currency.$error"
+                      ng-show="PurchaseCtrl.$submitted">
+                      <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+                    </div>
+                  </div>
+
+                  <div ng-if="PurchaseCtrl.rate.currency.id != PurchaseCtrl.enterprise.currency_id"
+                    style="margin-bottom: 1em;">
+                    <span translate>EXCHANGE.CURRENT_RATE</span>:
+                      <i>{{ PurchaseCtrl.currentExchangeRate | currency:PurchaseCtrl.rate.currency.id }}</i>
+                      <i><span translate>FORM.INFO.PER</span> {{PurchaseCtrl.enterprise.currencySymbol}}</i>
+                  </div>
+
+                  <div
+                    class="form-group"
+                    ng-class="{'has-error' : PurchaseOrderForm.$submitted && PurchaseOrderForm.notes.$invalid }">
+                    <label class="control-label" translate>FORM.LABELS.NOTES </label>
+                    <textarea
+                      ng-model="PurchaseCtrl.order.details.note"
+                      name="notes"
+                      class="form-control"
+                      rows="5"
+                      ng-maxlength="PurchaseCtrl.maxLength"
+                      required>
+                    </textarea>
+                    <div class="help-block" ng-messages="PurchaseOrderForm.notes.$error" ng-show="PurchaseOrderForm.$submitted">
+                      <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="form-group"
+                    ng-class="{'has-error' : PurchaseOrderForm.$submitted && PurchaseOrderForm.shipping_handling.$invalid }">
+                    <label class="control-label">
+                      <span translate>FORM.LABELS.SHIPPING_HANDLING_COST</span> ({{PurchaseCtrl.rate.currency.symbol}})</label>
+                    <input
+                      ng-model="PurchaseCtrl.order.details.shipping_handling"
+                      name="shipping_handling"
+                      class="form-control"
+                      type="number"
+                      min="0"
+                      ng-change="PurchaseCtrl.onChangeShippingHandling()">
+                    <div class="help-block" ng-messages="PurchaseOrderForm.shipping_handling.$error" ng-show="PurchaseOrderForm.$submitted">
+                      <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" ng-if="PurchaseCtrl.order._hasGlobalError">
+          <div class="col-xs-12">
+            <div class="alert alert-danger">
+              <i class="fa fa-warning"></i> <span translate>PURCHASES.ERRORS.INVALID_ACCOUNTS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TODO Move padding to generic CSS class -->
+        <div class="row" style="padding-bottom : 5px;">
+          <div class="col-xs-12">
+
+            <!-- "Optimal Purchase" button -->
+            <div class="btn-group pull-right" style="margin-left : 5px;">
+              <button
+                class="btn btn-default"
+                type="button"
+                ng-click="PurchaseCtrl.optimalPurchase()"
+                id="optimal_purchase"
+                ng-disabled="!PurchaseCtrl.order.hasSupplier() || PurchaseCtrl.optimalPurchaseLoading">
+                <span ng-hide="PurchaseCtrl.optimalPurchaseLoading">
+                  <i class="fa fa-shopping-cart"></i>
+                  <span translate>FORM.BUTTONS.OPTIMAL_PURCHASE_ORDER </span>
+                </span>
+                <span ng-show="PurchaseCtrl.optimalPurchaseLoading">
+                  <span class="fa fa-circle-o-notch fa-spin"></span> <span translate>FORM.INFO.LOADING</span>
+                </span>
+              </button>
+            </div>
+
+            <!-- "Add number of grid rows" input-group -->
+            <bh-add-item
+              disable="PurchaseCtrl.order.hasSupplier()"
+              callback="PurchaseCtrl.order.addItems(numItem)">
+            </bh-add-item>
+
+            <!-- @todo - hacky check for inventory to prevent local variables -->
+            <p
+              style="padding-top : 10px;"
+              class="text-warning"
+              ng-show="PurchaseCtrl.order.inventory.size() > 0 && PurchaseCtrl.order.inventory.available.data.length === 0">
+              <span class="fa fa-info-circle"></span>
+              <span translate>FORM.INFO.ITEMS_FULL</span>
+            </p>
+
+            <p
+              style="padding-top : 10px;"
+              class="text-info"
+              ng-show="!PurchaseCtrl.order.hasSupplier()">
+              <span class="fa fa-info-circle"></span>
+              <span translate>FORM.INFO.NO_SUPPLIER</span>
+            </p>
+          </div>
+        </div>
+
+        <div
+          id="purchase-order-grid"
+          ui-grid="PurchaseCtrl.gridOptions"
+          style="height : {{ ::PurchaseCtrl.bhConstants.GRID_HEIGHT }}px; width : 100%;">
+        </div>
+
+        <div class="row" ng-if="PurchaseCtrl.order.hasSupplier()">
+          <h4 class="text-right" style="margin-right: 25px;">
+            <span translate>FORM.LABELS.TOTAL</span>
+            {{ PurchaseCtrl.order.totals.rows + PurchaseCtrl.order.details.shipping_handling | currency:PurchaseCtrl.rate.currency.id }}
+          </h4>
+        </div>
+
+        <div class="row" style="padding-top : 5px; padding-bottom : 5px;">
+          <div class="col-md-12 text-right">
+            <bh-loading-button
+              disabled="!PurchaseCtrl.order.hasSupplier()"
+              loading-state="PurchaseCtrl.loadingState">
+              <span translate>FORM.BUTTONS.SAVE</span>
+            </bh-loading-button>
+
+            <button
+              type="button"
+              class="btn btn-default"
+              ng-click="PurchaseCtrl.clear(PurchaseOrderForm)"
+              data-method="clear"
+              ng-show="!PurchaseCtrl.isUpdateState"
+              translate>
+              FORM.BUTTONS.CLEAR
+            </button>
+            <button
+              type="button"
+              class="btn btn-default"
+              ng-click="PurchaseCtrl.cancel()"
+              data-method="cancel">
+              <span ng-show="PurchaseCtrl.isUpdateState" translate>FORM.BUTTONS.CANCEL_EDIT</span>
+              <span ng-show="!PurchaseCtrl.isUpdateState" translate>FORM.BUTTONS.CANCEL</span>
+            </button>            <p
+              class="text-danger"
+              ng-show="PurchaseCtrl.order._invalid && PurchaseOrderForm.$submitted">
+              <span class="fa fa-exclamation-circle"></span>
+              <span translate>FORM.ERRORS.INVALID</span>
+            </p>
+          </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/ng-template" id="typePopover.tmpl.html">
+  <dl>
+    <dt translate>PURCHASES.PAYMENT_METHOD </dt>
+    <dd translate>PURCHASES.PAYMENT_METHOD_EXPLANATION </dd>
+  </dl>
+</script>

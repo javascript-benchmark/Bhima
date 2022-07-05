@@ -1,0 +1,80 @@
+<div class="modal-header" data-depot-selection-modal>
+  <ol class="headercrumb">
+    <li class="static" translate>TREE.DEPOTS</li>
+    <li class="title" translate>DEPOT.MODAL.SELECTION</li>
+  </ol>
+</div>
+
+<div class="modal-body">
+
+  <div uib-alert class="alert-warning" ng-if="$ctrl.hasNoDefaultDepot && $ctrl.depots.length>0">
+    <p>
+      <strong> <i class="fa fa-warning"></i> <span translate>DEPOT.MODAL.NO_DEFAULT_DEPOT</span></strong>
+      <br />
+      <span translate>DEPOT.MODAL.SELECTION_EXPLANATION</span>
+    </p>
+  </div>
+
+  <div uib-alert class="alert-warning" ng-if="$ctrl.depots.length===0">
+      <p>
+        <span translate>DEPOT.NO_DEPOT_ASSIGNED_TO_USER</span>
+      </p>
+    </div>
+  <div ng-if="$ctrl.depots.length>0" class="clearfix">
+    <label class="control-label" translate>DEPOT.MODAL.SELECT_A_DEPOT</label>
+
+    <div ng-if="$ctrl.depots.length > $ctrl.limit" class="form-group">
+      <p class="text-primary" translate>DEPOT.MODAL.MORE_DEPOT_WARNING</p>
+      <div class="input-group">
+        <input ng-model="$ctrl.search" type="text" class="form-control" translate-attr="{ 'placeholder': 'FORM.LABELS.SEARCH' }">
+        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+
+    <!-- list of depots -->
+    <ul style="margin-bottom: 2px;" class="list-group">
+      <li
+        class="list-group-item"
+        ng-repeat="depot in $ctrl.depots | filter: $ctrl.search | limitTo: $ctrl.displayLimit track by depot.uuid"
+        ng-class="{'active' : $ctrl.depot.uuid === depot.uuid}"
+        ng-click="$ctrl.selectDepot(depot.uuid)"
+        style="cursor:pointer;">
+
+        <span id="depot-{{ depot.uuid }}">
+          <i class="fa fa-inbox"></i> {{ depot.text }}
+        </span>
+
+        <span ng-show="$ctrl.depot.uuid === depot.uuid" class="badge">
+          <i class="fa fa-check"></i>
+        </span>
+      </li>
+    </ul>
+
+    <a href ng-click="$ctrl.showAllDepots()" ng-if="$ctrl.depots.length > $ctrl.limit && !$ctrl.showAll"
+      class="text-right text-primary pull-right"
+      translate-values="{ number : $ctrl.totalOtherDepots }"
+      translate>DEPOT.MODAL.AND_MORE_DEPOTS
+    </a>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    data-method="cancel"
+    type="button"
+    class="btn btn-default"
+    ng-click="$ctrl.cancel()"
+    translate>
+    FORM.BUTTONS.CANCEL
+  </button>
+
+  <button
+    type="button"
+    data-method="submit"
+    class="btn btn-primary"
+    ng-disabled="!$ctrl.hasSelectedDepot()"
+    ng-click="$ctrl.submit()"
+    translate>
+    FORM.BUTTONS.SUBMIT
+  </button>
+</div>

@@ -1,0 +1,82 @@
+<form name="ModalForm" bh-submit="ModalCtrl.submit(ModalForm)" novalidate>
+  <div class="modal-header">
+    <ol class="headercrumb">
+      <li class="static" translate>EXCHANGE.TITLE</li>
+      <li class="title" translate>EXCHANGE.ADDING_RATE</li>
+    </ol>
+    <p ng-if="ModalCtrl.missingRates" class="missing-exchange-rate">{{ModalCtrl.missingRatesWarning}}</p>
+  </div>
+
+  <div class="modal-body">
+
+    <div
+      class="form-group"
+      ng-show="ModalCtrl.hasMultipleCurrencies"
+      ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.currency.$invalid }">
+
+      <label class="control-label" translate>FORM.LABELS.CURRENCY</label>
+
+      <ui-select
+        name="currency"
+        ng-model="ModalCtrl.rate.currency"
+        ng-change="ModalCtrl.selectCurrency()"
+        required>
+        <ui-select-match placeholder="{{ 'FORM.PLACEHOLDERS.CURRENCY' | translate }}">
+          <span>{{ ModalCtrl.format($select.selected.id) }}</span>
+        </ui-select-match>
+        <ui-select-choices
+          ui-select-focus-patch
+          repeat="currency as currency in ModalCtrl.currencies | filter:$select.search">
+          <span ng-bind-html="ModalCtrl.format(currency.id) | highlight:$select.search"></span>
+        </ui-select-choices>
+      </ui-select>
+
+      <div class="help-block" ng-messages="ModalForm.currency.$error" ng-show="ModalForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+
+    <bh-date-editor
+      date-value="ModalCtrl.rate.date"
+      on-change="ModalCtrl.onDateChange(date)">
+    </bh-date-editor>
+
+    <div>
+      <span translate>EXCHANGE.CURRENT_RATE</span>:
+        <i>{{ ModalCtrl.currentExchangeRate | currency:ModalCtrl.rate.currency.id }}</i>
+        <i><span translate>FORM.INFO.PER</span> {{ModalCtrl.enterprise.currencySymbol}}</i>
+    </div>
+
+    <div class="form-group"
+      ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.rate.$invalid }">
+      <label class="control-label" translate>FORM.LABELS.EXCHANGE_RATE</label>
+      <div class="row">
+        <div class="col-xs-2">
+          <p class="form-control-static text-right" ng-class="{ 'text-danger' : ModalForm.$submitted && ModalForm.rate.$invalid }">
+            {{ 1 | currency:ModalCtrl.enterprise.currency_id }} <b>=</b>
+          </p>
+        </div>
+        <div class="col-xs-10">
+          <div class="input-group">
+            <!-- Improve me Prevent exchange rate equal 0 -->
+            <input class="form-control" min="0.000000000001" type="number" name="rate" ng-model="ModalCtrl.rate.rate" required>
+            <span class="input-group-addon">{{ ModalCtrl.symbol(ModalCtrl.rate.currency.id) }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="help-block" ng-messages="ModalForm.rate.$error" ng-show="ModalForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="ModalCtrl.cancel()" data-method="cancel" translate>
+      FORM.BUTTONS.CANCEL
+    </button>
+
+    <bh-loading-button loading-state="ModalForm.$loading">
+      <span translate>FORM.BUTTONS.SUBMIT</span>
+    </bh-loading-button>
+  </div>
+</form>

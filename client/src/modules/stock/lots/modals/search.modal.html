@@ -1,0 +1,135 @@
+<form
+  name="ModalForm"
+  ng-submit="$ctrl.submit(ModalForm)"
+  data-modal="stock-lots-search"
+  novalidate>
+
+  <div class="modal-header">
+    <ol class="headercrumb">
+      <li class="static" translate>TREE.STOCK_LOTS</li>
+      <li class="title" translate>FORM.LABELS.SEARCH</li>
+    </ol>
+  </div>
+
+  <div class="modal-body" style="overflow: auto; max-height: 600px; padding: 0px">
+    <uib-tabset>
+      <uib-tab index="0" heading="{{ 'FORM.LABELS.SEARCH_QUERIES' | translate}}" data-custom-filter-tab>
+        <div class="tab-body">
+
+          <!-- depot -->
+          <bh-depot-select
+            depot-uuid="$ctrl.searchQueries.depot_uuid"
+            required="false"
+            on-select-callback="$ctrl.onSelectDepot(depot)">
+            <bh-clear on-clear="$ctrl.clear('depot_uuid')"></bh-clear>
+          </bh-depot-select>
+
+          <!-- Inventory -->
+          <bh-inventory-select
+            inventory-uuid="$ctrl.searchQueries.inventory_uuid"
+            on-select-callback="$ctrl.onSelectInventory(inventory)"
+            required="false">
+            <bh-clear on-clear="$ctrl.clear('inventory_uuid')"></bh-clear>
+          </bh-inventory-select>
+
+          <!-- inventory group -->
+          <bh-inventory-group-select
+            group-uuid="$ctrl.searchQueries.group_uuid"
+            name="group_uuid"
+            required="false"
+            on-select-callback="$ctrl.onSelectGroup(group)">
+            <bh-clear on-clear="$ctrl.clear('group_uuid')"></bh-clear>
+          </bh-inventory-group-select>
+
+          <!-- lot number  -->
+          <div class="form-group">
+            <label class="control-label" translate>STOCK.LOT</label>
+            <bh-clear on-clear="$ctrl.clear('label')"></bh-clear>
+            <input type="text" class="form-control" name="label" ng-model="$ctrl.searchQueries.label">
+            <div class="help-block" ng-messages="ModalForm.label.$error" ng-show="ModalForm.$submitted">
+              <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+            </div>
+          </div>
+
+          <!-- expiration date -->
+          <bh-date-interval
+            label="STOCK.EXPIRATION_DATE"
+            date-id="expiration-date"
+            date-from="$ctrl.searchQueries.expiration_date_from"
+            date-to="$ctrl.searchQueries.expiration_date_to"
+            on-change="$ctrl.onExpirationDate(dateFrom, dateTo)">
+          </bh-date-interval>
+
+          <bh-yes-no-radios
+            label="STOCK.TOGGLE_EXPIRED_STOCK"
+            value="$ctrl.searchQueries.is_expired"
+            name="is_expired"
+            help-text="STOCK.TOGGLE_EXPIRED_STOCK_HELP_TEXT"
+            on-change-callback="$ctrl.onToggleExpired(value)">
+            <bh-clear on-clear="$ctrl.clear('is_expired')"></bh-clear>
+          </bh-yes-no-radios>
+
+          <bh-yes-no-radios
+            label="STOCK.TOGGLE_EXPIRY_RISKS"
+            value="$ctrl.searchQueries.is_expiry_risk"
+            id="isExpiryRisk"
+            name="is_expiry_risk"
+            help-text="STOCK.TOGGLE_EXPIRY_RISKS_HELP_TEXT"
+            on-change-callback="$ctrl.onToggleExpiryRisk(value)">
+            <bh-clear on-clear="$ctrl.clear('is_expiry_risk')"></bh-clear>
+          </bh-yes-no-radios>
+
+          <!-- tags -->
+          <bh-tag-select
+            tag-uuids="$ctrl.searchQueries.tags"
+            on-select-callback="$ctrl.onSelectTags(tags)">
+            <bh-clear on-clear="$ctrl.clear('tags')"></bh-clear>
+          </bh-tag-select>
+
+        </div>
+      </uib-tab>
+
+      <uib-tab index="1" heading="{{ 'FORM.LABELS.DEFAULTS' | translate }}" data-default-filter-tab>
+        <div class="tab-body">
+          <bh-period-select
+            default-period="{{$ctrl.filters.period}}"
+            on-select-callback="$ctrl.onSelectPeriod(period)">
+          </bh-period-select>
+
+          <bh-stock-filter-exhausted
+            name="includeEmptyLot"
+            value="$ctrl.defaultQueries.includeEmptyLot"
+            on-change-callback="$ctrl.setIncludeEmptyLot(value)">
+          </bh-stock-filter-exhausted>
+
+          <div class="form-group" ng-class="{ 'has-error' : ModalForm.limit.$invalid }">
+            <label class="control-label" translate>FORM.LABELS.LIMIT</label>
+            <input
+              name="limit"
+              type="number"
+              min="0"
+              bh-integer
+              bh-max-integer
+              class="form-control"
+              ng-model="$ctrl.defaultQueries.limit"
+              ng-change="$ctrl.onSelectLimit($ctrl.defaultQueries.limit)">
+
+            <div class="help-block" ng-messages="ModalForm.limit.$error">
+              <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+            </div>
+          </div>
+        </div>
+      </uib-tab>
+    </uib-tabset>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$ctrl.cancel()" data-method="cancel" translate>
+      FORM.BUTTONS.CLOSE
+    </button>
+
+    <bh-loading-button loading-state="ModalForm.$loading">
+      <span translate>FORM.BUTTONS.SUBMIT</span>
+    </bh-loading-button>
+  </div>
+</form>

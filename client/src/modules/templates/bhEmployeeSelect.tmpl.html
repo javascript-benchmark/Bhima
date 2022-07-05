@@ -1,0 +1,33 @@
+<fieldset
+  ng-form="EmployeeForm"
+  ng-model-options="{ updateOn: 'default' }"
+  bh-employee-select>
+
+  <div class="form-group"
+       ng-class="{ 'has-error' : EmployeeForm.$submitted && EmployeeForm.employee_uuid.$invalid }">
+
+    <label class="control-label" translate>
+      FORM.LABELS.EMPLOYEE_NAME
+    </label>
+
+    <ng-transclude></ng-transclude>
+
+    <ui-select
+      name="employee_uuid"
+      ng-model="$ctrl.employeeUuid"
+      ng-required="$ctrl.required"
+      on-select="$ctrl.onSelect($item)">
+      <ui-select-match placeholder="{{ 'FORM.SELECT.EMPLOYEE' | translate }}"><span>{{$select.selected.display_name}}</span></ui-select-match>
+      <ui-select-choices
+        ui-select-focus-patch
+        repeat="employee.uuid as employee in $ctrl.employees | filter: { 'hrlabel': $select.search }">
+        <strong ng-bind-html="employee.reference | highlight:$select.search"></strong> -
+        <span ng-bind-html="employee.display_name | highlight:$select.search"></span>
+      </ui-select-choices>
+    </ui-select>
+
+    <div class="help-block" ng-messages="EmployeeForm.employee_uuid.$error" ng-show="EmployeeForm.$submitted">
+      <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+    </div>
+  </div>
+</fieldset>

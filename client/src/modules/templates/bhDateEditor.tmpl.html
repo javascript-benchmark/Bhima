@@ -1,0 +1,66 @@
+<!-- date editor component view implementation-->
+<!--
+  Strangely, uib-datepicker will not mark the ng-model as invalid if the date
+  is not in a valid range.  Instead, it will mark the _entire_ form as invalid,
+  with a "dateDisabled" error.
+
+  You can manually edit the date with the keyboard to get to dates outside the
+  enabled/disabled range on the calendar.  For this reason, I've put in an
+  additional ng-message "date not in range" to deal with that particular case.
+  It isn't ideal, but seems to be the only way to account for that scenario.
+-->
+<ng-form name="DateEditorForm" novalidate>
+  <div
+    class="form-group"
+    ng-class="{ 'has-error' : DateEditorForm.$submitted && DateEditorForm.$invalid } "
+    data-date-editor>
+
+    <label class="control-label" translate>
+      {{ $ctrl.label }}
+    </label>
+
+    <!-- input component implementation -->
+    <div class="input-group">
+      <input
+        name="date"
+        type="text"
+        ng-change="$ctrl.onDateChange()"
+        class="form-control"
+        uib-datepicker-popup="{{ $ctrl.dateFormat }}"
+        ng-model="$ctrl.dateValue"
+        is-open="$ctrl.editMode"
+        datepicker-options="$ctrl.options"
+        show-button-bar="false"
+        data-date-editor-input
+        ng-readonly="!$ctrl.editMode"
+        ng-disabled="$ctrl.disabled"
+        ng-required="$ctrl.required">
+      <span class="input-group-btn">
+        <button
+          type="button"
+          class="btn btn-default"
+          ng-click="$ctrl.toggleEditMode()"
+          ng-disabled="$ctrl.editMode || $ctrl.disabled"
+          data-date-editor-dropdown-toggle>
+          <span class="fa fa-calendar"></span>
+          <span translate>FORM.LABELS.SET_DATE</span>
+        </button>
+      </span>
+    </div>
+
+    <!-- validation/error messages for the form (see discussion at the top -->
+    <div class="help-block" ng-messages="DateEditorForm.$error" ng-show="DateEditorForm.$submitted">
+
+      <!-- @todo - potentially include this message in the generic date validation messages -->
+      <p ng-message="dateDisabled">
+        <span class="fa fa-warning"></span>
+        <span translate>FORM.ERRORS.DATE_OUT_OF_RANGE</span>
+      </p>
+    </div>
+
+    <!-- validation/error messages for date input -->
+    <div class="help-block" ng-messages="DateEditorForm.date.$error" ng-show="DateEditorForm.$submitted">
+      <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+    </div>
+  </div>
+</ng-form>

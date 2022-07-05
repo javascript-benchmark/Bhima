@@ -1,0 +1,140 @@
+{{> head title="STOCK.RECEIPT.ENTRY_PURCHASE" }}
+
+<!-- body  -->
+<div class="container" style="font-size: 0.9em;">
+
+  <header>
+    <!-- headings  -->
+    {{> stockReceiptHeader
+      title="STOCK.RECEIPT.ENTRY_PURCHASE"
+      entity=details.depot_name
+      reference=details.document_reference
+      barcode=details.barcode
+    }}
+
+    <!-- summary  -->
+    <div class="row receipt-summary">
+      <div class="col-xs-6">
+        <!-- LEFT column -->
+        <h4>{{translate 'STOCK.FROM'}}: {{translate 'STOCK.ENTRY_PURCHASE'}}</h4>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.SUPPLIER'}}</span>: <strong>{{details.supplier_display_name}}</strong> <br>
+        <span class="text-capitalize">{{translate 'STOCK.PURCHASE_ORDER'}}</span>: <strong>{{details.purchase_reference}}</strong> <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.DATE'}}</span>: {{date details.p_date}}<br>
+        <span class="text-capitalize">{{translate 'TABLE.AGGREGATES.TOTAL_AMOUNT'}}</span>: {{currency details.p_total_cost details.p_currency_id}}
+        {{#if not_in_enterprise_currency}}
+          = {{currency details.p_total_cost_equiv enterprise.currency_id}}
+        {{/if}}
+        <br>
+        {{#if details.p_shipping_handling}}
+        <span style="margin-left: 1em;">{{translate 'FORM.LABELS.INCLUDES_SHIPPING_HANDLING_COST'}}</span>: {{currency details.p_shipping_handling details.p_currency_id}}
+        {{#if not_in_enterprise_currency }}
+          = {{currency details.p_shipping_handling_equiv enterprise.currency_id}}
+        {{/if}}
+        <br>
+        {{/if}}
+        <span class="text-capitalize">{{translate 'FORM.LABELS.PAYMENT_METHOD'}}</span>: {{translate details.p_method}} <br>
+      </div>
+      <div class="col-xs-6">
+        <!-- RIGHT column -->
+        <h4>{{translate 'STOCK.TO'}}</h4>
+        <span class="text-capitalize">{{translate 'STOCK.DEPOT'}}</span>: <strong>{{details.depot_name}}</strong> <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.DOCUMENT'}}</span>: <strong>{{details.document_reference}}</strong> <br>
+        {{#if details.autoStockAccountingEnabled}}
+          <span class="text-capitalize">{{translate 'FORM.LABELS.VOUCHER'}}</span>:
+          {{#if details.voucher_reference}}
+            <strong>{{details.voucher_reference}}</strong>
+          {{else}}
+            <i>{{translate 'STOCK.DO_NOT_EXIST_BEFORE_ACCOUNTING_SETUP'}}</i>
+          {{/if}}
+          <br>
+        {{/if}}
+        <span class="text-capitalize">{{translate 'FORM.LABELS.DATE'}}</span>: {{date details.date}} <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.VALUE'}}</span>: {{currency details.total_cost_deliv details.p_currency_id}}
+        {{#if not_in_enterprise_currency }}
+          = {{currency details.total_cost_deliv_equiv enterprise.currency_id}}
+        {{/if}}
+        {{#unless details.order_complete}}
+          ({{translate 'FORM.LABELS.PARTIAL_DELIVERY'}})
+        {{/unless}}        <br>
+        <span class="text-capitalize">{{translate 'STOCK.INVENTORY'}}</span>: {{rows.length}} {{translate 'STOCK.ITEMS'}} <br>
+        <span class="text-capitalize">{{translate "TABLE.COLUMNS.CREATED_BY"}}</span>: {{details.user_display_name}} <br>
+      </div>
+    </div>
+  </header>
+
+  {{#if details.description}}
+  <div class="receipt-summary">
+    <strong>{{translate 'FORM.LABELS.NOTE'}}</strong><br>
+    {{details.description}}
+  </div>
+  {{/if}}
+
+  <!-- list of data  -->
+  <table class="table table-condensed table-bordered table-report">
+    <thead>
+      <tr>
+        <th>{{translate 'STOCK.CODE'}}</th>
+        <th>{{translate 'STOCK.INVENTORY'}}</th>
+        <th>{{translate 'STOCK.LOT'}}</th>
+        <th>{{translate 'STOCK.EXPIRATION'}}</th>
+        <th>{{translate 'STOCK.QUANTITY'}}</th>
+        <th>{{translate 'STOCK.UNIT_COST'}}</th>
+        {{#if details.p_shipping_handling}}
+        <th style="width: 5.5em; text-align: center" title="{{translate 'STOCK.UNIT_COST_SH_TOOLTIP'}}">{{translate 'STOCK.UNIT_COST_SH'}} *</th>
+        {{/if}}
+        <th>{{translate 'TABLE.COLUMNS.TOTAL'}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each rows}}
+        <tr>
+          <td>{{code}}</td>
+          <td>{{text}}</td>
+          <td>{{label}}</td>
+          {{#if expires}}
+            <td>{{date expiration_date}}</td>
+          {{else}}
+            <td></td>
+          {{/if}}
+          <td class="text-right">{{quantity}}</td>
+          <td class="text-right">{{currency unit_cost_base ../details.p_currency_id}}</td>
+          {{#if ../details.p_shipping_handling}}
+          <td class="text-right">{{currency unit_cost_deliv ../details.p_currency_id}}</td>
+          {{/if}}
+          <td class="text-right">{{currency cost_deliv ../details.p_currency_id}}</td>
+        </tr>
+      {{else}}
+        {{> emptyTable columns=9}}
+      {{/each}}
+    </tbody>
+    <tfoot>
+      <tr style="font-weight: bold;">
+        <td colspan="{{ncols}}">{{rows.length}} {{translate 'STOCK.ITEMS'}}</td>
+        <td class="text-right">{{currency details.total_cost_deliv details.p_currency_id}}</td>
+      </tr>
+    </tfoot>
+  </table>
+  <br>
+  {{#if details.p_shipping_handling }}
+  <div style="margin: 0 0 1ex 0; padding: 0;">
+    * {{translate 'STOCK.UNIT_COST_SH_NOTE'}}
+  </div>
+  {{/if}}
+
+  <footer>
+    <div class="row">
+      <div class="col-xs-6">
+        <h4 class="text-center">{{translate 'REPORT.FOOTER.APPROVED_BY'}}</h4>
+        <hr>
+      </div>
+
+      <div class="col-xs-6">
+        <h4 class="text-center">{{translate 'REPORT.FOOTER.DEPOT_MANAGER'}}</h4>
+        <hr>
+      </div>
+    </div>
+  </footer>
+  {{#if metadata.enterprise.settings.enable_barcodes}}
+    <script>JsBarcode('.barcode').init();</script>
+  {{/if}}
+</div>

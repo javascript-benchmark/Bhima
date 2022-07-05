@@ -1,0 +1,86 @@
+<div class="flex-header static">
+  <div class="bhima-title">
+    <ol class="headercrumb">
+      <li class="static" translate>TREE.STOCK</li>
+      <li ng-class="{ 'title' : !StockCtrl.depot.uuid, 'static' : StockCtrl.depot.uuid }">
+        <span translate>STOCK.IMPORT.STOCK_FROM_FILE</span>
+      </li>
+      <li class="title" ng-if="StockCtrl.depot.uuid">
+        <span>{{ StockCtrl.depot.text }}</span>
+      </li>
+    </ol>
+
+    <div class="toolbar">
+      <div class="toolbar-item">
+        <bh-dropdown-menu>
+          <bh-dropdown-menu-item>
+            <a href>
+              <bh-change-depot on-select="StockCtrl.onChangeDepot(depot)"></bh-change-depot>
+            </a>
+          </bh-dropdown-menu-item>
+        </bh-dropdown-menu>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- content -->
+<div class="flex-content">
+  <div class="container-fluid">
+    <form name="StockForm" bh-submit="StockCtrl.submit(StockForm)" novalidate>
+      <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3">
+          <p translate>STOCK.IMPORT.ABOUT_DESCRIPTION</p>
+
+          <h3 class="alert alert-success" ng-show="StockCtrl.depot.uuid">
+            <i class="fa fa-home"></i>
+            <span>{{ StockCtrl.depot.text }}</span>
+          </h3>
+
+          <p class="alert alert-danger" ng-hide="StockCtrl.depot.uuid">
+            <i class="fa fa-warning"></i>
+            <span translate>STOCK.IMPORT.PLEASE_SELECT_DEPOT</span>
+          </p>
+
+          <!-- date -->
+          <bh-date-editor
+            date-value="StockCtrl.operationDate"
+            on-change="StockCtrl.onDateChange(date)">
+          </bh-date-editor>
+
+          <div>
+            <span translate>STOCK.IMPORT.TEMPLATE_FILE_DESCRIPTION</span>
+            <a ng-click="StockCtrl.downloadTemplate()" href>
+              <i class="fa fa-cloud-download"></i>
+              <span translate>STOCK.IMPORT.DOWNLOAD_TEMPLATE_HERE</span>
+            </a>
+          </div>
+
+          <br>
+
+          <p translate>STOCK.IMPORT.DESCRIPTION</p>
+
+          <div class="form-group"
+            ng-class="{ 'has-error' : StockCtrl.noSelectedFile }">
+            <label translate>STOCK.IMPORT.STOCK_FROM_FILE</label>
+            <input
+              id="import-input"
+              accept=".csv"
+              class="form-control"
+              type="file"
+              name="file"
+              ng-model="StockCtrl.file"
+              ngf-select="StockCtrl.select(StockCtrl.file)">
+            <div class="help-block" data-error-message ng-show="StockCtrl.noSelectedFile">
+              <i class="fa fa-warning"></i> <span translate>INVENTORY.NO_FILE_SELECTED</span>
+            </div>
+          </div>
+
+          <bh-loading-button loading-state="StockForm.$loading" disabled="!StockCtrl.depot.uuid || !StockCtrl.file">
+            <span translate>FORM.BUTTONS.SUBMIT</span>
+          </bh-loading-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

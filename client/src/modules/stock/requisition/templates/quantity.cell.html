@@ -1,0 +1,12 @@
+<div style="padding : 5px;">
+  <div ng-if="row.entity._initialised">
+    <input
+      id="inv-code-{{ row.entity.code }}"
+      name="code"
+      type="number"
+      class="form-control text-right"
+      ng-model="row.entity.quantity"
+      ng-change="grid.appScope.checkInventoryAvailability(row.entity.inventory, row.entity.quantity)"
+      required>
+  </div>
+</div>

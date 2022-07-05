@@ -1,0 +1,90 @@
+{{> head title="INVOICE_REGISTRY.TITLE"}}
+
+<body>
+  {{> header}}
+
+  <!-- page title  -->
+  <h2 class="text-center text-uppercase">
+    {{translate 'INVOICE_REGISTRY.TITLE'}}
+  </h2>
+
+  <br />
+
+  {{> filterbar filters=filters }}
+
+  <!-- invoices listed  -->
+  <table class="table table-condensed table-report">
+    <thead>
+      <tr>
+        <th>{{translate 'TABLE.COLUMNS.REFERENCE'}}</th>
+        <th>{{translate 'TABLE.COLUMNS.BILLING_DATE'}}</th>
+        <th>{{translate 'TABLE.COLUMNS.PATIENT'}}</th>
+        <th>{{translate 'TABLE.COLUMNS.AMOUNT'}}</th>
+        <th>{{translate 'TABLE.COLUMNS.SERVICE'}}</th>
+        <th>{{translate 'TABLE.COLUMNS.CREATED_BY'}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each rows}}
+        <tr>
+          <td title="{{reference}}">{{reference}}</td>
+          <td class="text-right">{{date date}}</td>
+          <td title="{{patientName}}">{{patientName}}</td>
+          <td class="text-right">{{currency cost currency_id}}</td>
+          <td>{{serviceName}}</td>
+          <td>{{display_name}}</td>
+        </tr>
+      {{else}}
+        {{> emptyTable columns=6}}
+      {{/each}}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="3">{{ translate 'TABLE.AGGREGATES.NUM_INVOICES' }}: {{ aggregates.numInvoices }} </th>
+        <th class="text-right">{{currency aggregates.amount metadata.enterprise.currency_id }}</th>
+        <th colspan="2"></th>
+      </tr>
+    </tfoot>
+  </table>
+
+  {{#if aggregates}}
+    <br />
+    <div class="row">
+      <div class="col-xs-6">
+
+        <!-- summary table -->
+        <table class="table table-condensed table-bordered table-report">
+          <tbody>
+            <tr>
+              <th colspan="2" class="text-center">
+                {{ translate 'FORM.LABELS.SUMMARY' }} ({{date aggregates.minDate }} - {{date aggregates.maxDate}})
+              </th>
+            </tr>
+            <tr>
+              <th>{{ translate 'TABLE.AGGREGATES.NUM_INVOICES' }}</th>
+              <td class="text-right">{{ aggregates.numInvoices }}</td>
+            </tr>
+            <tr>
+              <th>{{ translate 'TABLE.AGGREGATES.TOTAL_AMOUNT' }}</th>
+              <td class="text-right">{{currency aggregates.amount metadata.enterprise.currency_id}}</td>
+            </tr>
+            <tr>
+              <th>{{ translate 'TABLE.AGGREGATES.NUMBER_OF_DAYS' }}</th>
+              <td class="text-right">{{ aggregates.numDays }}</td>
+            </tr>
+            <tr>
+              <th>{{ translate 'TABLE.AGGREGATES.NUM_SERVICES' }}</th>
+              <td class="text-right">{{ aggregates.numServices }}</td>
+            </tr>
+            {{#if hasMultipleProjects }}
+              <tr>
+                <th>{{ translate 'TABLE.AGGREGATES.NUM_PROJECTS' }}</th>
+                <td class="text-right">{{ aggregates.numProjects }}</td>
+              </tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {{/if}}
+</body>

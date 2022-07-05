@@ -1,0 +1,10 @@
+<div class="ui-grid-cell-contents" data-row="{{row.entity.hrLabel}}">
+  <a href
+    class="text-info"
+    data-method="view-in-journal"
+    ui-sref="journal({filters : [{ key : 'account_id', displayValue : row.entity.hrLabel, value: row.entity.account_id, cacheable: 0 },
+      { key : 'includeNonPosted', value : 1 }, { key : 'period', value : 'allTime' }]})"
+    ui-sref-opts="{ reload : false }">
+    <span translate>FORM.BUTTONS.VIEW_IN_JOURNAL</span>
+  </a>
+</div>

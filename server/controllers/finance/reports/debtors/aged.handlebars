@@ -1,0 +1,102 @@
+{{> head title="REPORT.AGED_DEBTORS.TITLE"}}
+
+<body>
+  <main class="container">
+    {{> header }}
+
+    <h3 class="text-center text-uppercase">
+      <strong>{{translate "REPORT.AGED_DEBTORS.TITLE"}}</strong>
+    </h3>
+
+    <h5 class="text-center">
+      <strong>
+        <span class="text-capitalize">{{translate "FORM.LABELS.UNTIL_PERIOD"}}</span> <span class="text-capitalize"> {{date dateUntil "MMMM YYYY"}} </span>
+      </strong>
+    </h5>
+    <!-- margin is the cell size -->
+    <section>
+      <table class="table table-condensed table-report table-bordered">
+        <thead>
+          <tr class="text-capitalize text-center" style="background-color: #ddd;">
+            <th>{{translate "TABLE.COLUMNS.NAME"}}</th>
+            <th style="width:15%" class="text-center">{{translate "FORM.LABELS.ACCOUNT_NUMBER"}}</th>
+            <th class="text-center">
+              {{#if useMonthGrouping}}
+                {{translate "REPORT.PREVIOUS_MONTHS"}}
+              {{else}}
+                {{translate "REPORT.OVER_NINETY_DAYS"}}
+              {{/if}}
+            </th>
+            <th class="text-center">
+              {{#if useMonthGrouping}}
+                {{month thirdMonth}}
+              {{else}}
+                {{translate "REPORT.SIXTY_TO_NINETY_DAYS"}}
+              {{/if}}
+            </th>
+            <th class="text-center">
+              {{#if useMonthGrouping}}
+                {{month secondMonth}}
+              {{else}}
+                {{translate "REPORT.THIRTY_TO_SIXTY_DAYS"}}
+              {{/if}}
+            </th>
+            <th class="text-center">
+              {{#if useMonthGrouping}}
+                {{month firstMonth}}
+              {{else}}
+                {{translate "REPORT.ZERO_TO_THIRTY_DAYS"}}
+              {{/if}}
+            </th>
+            <th class="text-center">{{translate "TABLE.COLUMNS.TOTAL"}}</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- print a row for each debtor -->
+          {{#each debtors}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td class="text-left">{{this.number}}</td>
+              <td class="text-right">
+                {{#if this.excess}}
+                  {{debcred this.excess ../currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if this.ninety}}
+                  {{debcred this.ninety ../currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if this.sixty}}
+                  {{debcred this.sixty ../currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">
+                {{#if this.thirty}}
+                  {{debcred this.thirty ../currency_id}}
+                {{/if}}
+              </td>
+              <td class="text-right">{{debcred this.total ../currency_id}}</td>
+            </tr>
+          {{else}}
+            {{> emptyTable columns=7}}
+          {{/each}}
+        </tbody>
+        {{#if aggregates}}
+          <tfoot>
+            <tr style="background-color: #ddd;">
+              <th colspan="2">{{translate "TABLE.COLUMNS.TOTAL"}}</th>
+              <th class="text-right">{{debcred aggregates.excess ./currency_id}}</th>
+              <th class="text-right">{{debcred aggregates.ninety ./currency_id}}</th>
+              <th class="text-right">{{debcred aggregates.sixty ./currency_id}}</th>
+              <th class="text-right">{{debcred aggregates.thirty ./currency_id}}</th>
+              <th class="text-right">{{debcred aggregates.total ./currency_id}}</th>
+            </tr>
+          </tfoot>
+        {{/if}}
+      </table>
+    </section>
+  </main>
+</body>

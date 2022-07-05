@@ -1,0 +1,57 @@
+<head>
+  <meta charset="utf-8" />
+  {{#if metadata.enterprise.settings.enable_barcodes}}
+    <script src="{{nodeModulesPath}}/jsbarcode/dist/JsBarcode.all.min.js"></script>
+  {{/if}}
+
+  {{> point-of-sale-stylesheet }}
+</head>
+<body>
+
+<p><b style="text-transform : uppercase">{{patient.enterprise_name}}</b></p>
+<h2 style="text-align : left; margin : 0px">{{patient.reference}}</h2>
+<p style="margin-top : 0px">
+  {{date patient.registration_date}} {{translate 'FORM.LABELS.BY'}} {{patient.userName}}
+</p>
+
+{{#if metadata.enterprise.settings.enable_barcodes}}
+  <div style="text-align:center;">{{>barcode value=patient.barcode }}</div>
+{{/if}}
+
+<h2 style="margin-bottom : 0px">{{patient.display_name}}</h2>
+({{patient.reference}}) - {{patient.debtor_group_name}}
+<hr />
+<p><u>{{translate "FORM.LABELS.DOB"}}</u>: {{date patient.dob }}</p>
+<p><u>{{translate "FORM.LABELS.HOSPITAL_FILE_NR"}}</u>: {{ patient.hospital_no }}</p>
+<p><u>{{translate "FORM.LABELS.GENDER"}}</u>: {{ patient.sex }}</p>
+{{#if patient.mother_name}}
+  <p><u>{{translate "FORM.LABELS.MOTHER_NAME"}}</u> {{patient.mother_name}}</p>
+{{/if}}
+<p><u>{{translate "TABLE.COLUMNS.REGISTERED_ON"}}</u>: {{date patient.registration_date }}</p>
+<p><u>{{translate "FORM.LABELS.DEBTOR_GROUP"}}</u>: {{ patient.debtor_group_name }}</p>
+{{#if patient.health_zone}}
+  <p><u>{{translate "FORM.LABELS.HEALTH_ZONE"}}</u>: {{patient.health_zone}}</p>
+{{/if}}
+{{#if patient.health_area}}
+  <p><u>{{translate "FORM.LABELS.HEALTH_AREA"}}</u>: {{patient.health_area}}</p>
+{{/if}}
+
+<hr />
+
+<p><u>{{translate "FORM.LABELS.ORIGIN"}}</u>:</p>
+<address>
+  <span>{{village.name}}, {{village.sector_name}}, {{village.province_name}}</span> <br />
+  <span>{{village.country_name}}</span>
+</address>
+
+<p><u>{{translate "FORM.LABELS.ADDRESS"}}</u>:</p>
+<address>
+  <span>{{currentVillage.name}}, {{currentVillage.sector_name}}, {{currentVillage.province_name}}</span> <br />
+  <span>{{currentVillage.country_name}}</span>
+</address>
+<hr />
+
+{{#if metadata.enterprise.settings.enable_barcodes}}
+<script>JsBarcode('.barcode').init();</script>
+{{/if}}
+</body>

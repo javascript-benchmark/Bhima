@@ -1,0 +1,88 @@
+<div class="modal-header">
+  <ol class="headercrumb">
+    <li class="static" translate>PRICE_LIST.TITLE</li>
+    <li class="title" translate>PRICE_LIST.PRICE_LIST_ITEMS</li>
+  </ol>
+</div>
+
+<div class="modal-body">
+  <form name="ModalForm" bh-submit="ModalCtrl.submit(ModalForm)" novalidate>
+    <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.label.$invalid }">
+      <label class="control-label" translate>FORM.LABELS.DESIGNATION</label>
+      <input type="text" class="form-control" name="label" ng-maxlength="ModalCtrl.length250" autocomplete="off" ng-model="ModalCtrl.data.label" required>
+      <div class="help-block" ng-messages="ModalForm.label.$error" ng-show="ModalForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && (ModalForm.value.$invalid || ModalCtrl.error) }">
+      <label class="control-label" translate>FORM.LABELS.VALUE</label>
+      <input type="number" class="form-control" autocomplete="off" name="value" ng-model="ModalCtrl.data.value" required>
+      <div class="help-block" ng-messages="ModalForm.value.$error" ng-show="ModalForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="is_percentage" id="is_percentage" ng-true-value="1" ng-false-value="0" ng-model="ModalCtrl.data.is_percentage">
+        <span translate>FORM.LABELS.IS_PERCENT</span>
+      </label>
+    </div>
+
+    <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.inventory_uuid.$invalid }">
+      <label class="control-label" translate>FORM.LABELS.INVENTORY</label>
+      <ui-select name="inventory_uuid" ng-model="ModalCtrl.data.inventory_uuid" required>
+        <ui-select-match placeholder="{{ 'FORM.SELECT.INVENTORY' | translate }}">
+          <span>
+            <strong>{{$select.selected.code}}</strong> {{ $select.selected.label }}
+          </span>
+        </ui-select-match>
+        <ui-select-choices ui-select-focus-patch repeat="inventory.uuid as inventory in ModalCtrl.inventories | filter:$select.search">
+          <strong ng-bind-html="inventory.code | highlight:$select.search"></strong>
+          <span ng-bind-html="inventory.label | highlight:$select.search"></span>
+        </ui-select-choices>
+      </ui-select>
+      <div class="help-block" ng-messages="ModalForm.inventory_uuid.$error" ng-show="ModalForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+
+    <span ng-if="ModalCtrl.error" class="text-danger">
+      <i class="fa fa-alert"></i>
+      <span translate>{{ ModalCtrl.error }}</span>
+    </span>
+
+    <div class="row text-right" style="margin-bottom:15px;">
+      <div class="col-md-12">
+        <bh-loading-button loading-state="ModalForm.$loading">
+          <span translate>FORM.BUTTONS.ADD</span>
+        </bh-loading-button>
+      </div>
+    </div>
+  </form>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div
+        id="pricelist-items-grid"
+        style="height: 250px;"
+        ui-grid="ModalCtrl.gridOptions"
+        ui-grid-auto-resize
+        ui-grid-resize-columns>
+
+        <bh-grid-loading-indicator
+          loading-state="ModalCtrl.loading"
+          empty-state="ModalCtrl.gridOptions.data.length === 0"
+          error-state="ModalCtrl.hasError">
+        </bh-grid-loading-indicator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" data-method="cancel" class="btn btn-default" ng-click="ModalCtrl.cancel()" translate>
+    FORM.BUTTONS.CLOSE
+  </button>
+</div>

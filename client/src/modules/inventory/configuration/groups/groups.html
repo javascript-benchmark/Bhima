@@ -1,0 +1,78 @@
+<div class="panel panel-default">
+
+  <div class="panel-heading" style="display: flex; justify-content: space-between;">
+    <span>
+      <i class="fa fa-object-group"></i>
+      <span translate> INVENTORY.LIST_GROUP </span> ({{ GroupsCtrl.groupList.length }})
+    </span>
+
+    <button
+      ng-click="GroupsCtrl.addInventoryGroup()"
+      class="pull-right btn btn-primary btn-sm"
+      type="button" data-create-group>
+      <i class="fa fa-plus"> </i> <span translate>FORM.LABELS.ADD</span>
+    </button>
+  </div>
+
+  <section style="height: 300px; overflow: auto;">
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th translate> FORM.LABELS.CODE </th>
+          <th translate> FORM.LABELS.NAME </th>
+          <th translate> INVENTORY.CONTAINS </th>
+          <th class="text-center" colspan="3" translate> FORM.LABELS.ACCOUNT </th>
+          <th colspan="2">&nbsp;</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-filter"></i></span>
+              <input
+                ng-model="GroupsCtrl.searchValue"
+                type="search"
+                class="form-control input-sm"
+                style="display: inline"
+                translate-attr="{ placeholder: 'FORM.LABELS.SEARCH' }">
+            </div>
+          </th>
+          <th></th>
+          <th class="text-center"><small translate> FORM.LABELS.SALE </small></th>
+          <th class="text-center"><small translate> FORM.LABELS.STOCK </small></th>
+          <th class="text-center"><small translate> FORM.LABELS.CHARGE </small></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="group in GroupsCtrl.groupList | filter: GroupsCtrl.searchValue | orderBy:'name' track by group.code">
+          <td>{{ group.code }}</td>
+          <td>{{ group.name }}</td>
+          <td>
+            <a ui-sref="inventory.list({ filters : [{ key : 'group_uuid', value : group.uuid, displayValue: group.name }] })" href>
+              {{ group.inventory_counted }} <span class="text-lowercase" translate> INVENTORY.ELEMENT</span>(s)
+            </a>
+          </td>
+          <td class="text-center">{{ group.saleAccountNumber }}</td>
+          <td class="text-center">{{ group.stockAccountNumber }}</td>
+          <td class="text-center">{{ group.cogsAccountNumber }}</td>
+          <td>
+            <a href
+              ng-click="GroupsCtrl.editInventoryGroup(group.uuid)"
+              data-edit-group="{{ group.code }}">
+              <i class="fa fa-edit"></i> <span translate>FORM.BUTTONS.EDIT</span>
+            </a>
+          </td>
+          <td>
+            <a href
+              ng-click="GroupsCtrl.deleteInventoryGroup(group.uuid)"
+              class="text-danger"
+              data-delete-group="{{ group.code }}">
+              <i class="fa fa-remove"></i> <span translate>FORM.BUTTONS.DELETE</span>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>

@@ -1,0 +1,69 @@
+<div class="ui-grid-cell-contents text-right" uib-dropdown dropdown-append-to-body data-row="{{row.entity.number}}">
+  <a href uib-dropdown-toggle data-action="open-dropdown-menu">
+    <span translate>FORM.BUTTONS.ACTIONS</span>
+    <span class="caret"></span>
+  </a>
+
+  <ul data-row-menu="{{row.entity.number}}" class="dropdown-menu-right" bh-dropdown-menu-auto-dropup uib-dropdown-menu>
+    <li class="bh-dropdown-header">{{row.entity.number}} - {{row.entity.label}}</li>
+
+    <li>
+      <a href data-method="edit-record"
+        ui-sref="accounts.edit({id : row.entity.id})">
+        <i class="fa fa-edit"></i>
+        <span translate>TABLE.COLUMNS.EDIT</span>
+      </a>
+    </li>
+
+    <li class="divider" ng-if="row.entity.type_id !== grid.appScope.Constants.accounts.TITLE"></li>
+
+    <li ng-if="row.entity.type_id !== grid.appScope.Constants.accounts.TITLE">
+      <a ng-href="/reports/finance/account_report/?{{ grid.appScope.openAccountReport(row.entity.id) }}" ng-attr-download="{{ REPORT.ACCOUNT | translate }}">
+        <span class="fa fa-file-pdf-o"></span> <span translate>REPORT.ACCOUNT</span>
+      </a>
+    </li>
+
+    <li class="divider"></li>
+
+    <li>
+      <a href data-method="toggle-locked"
+        ng-click="grid.appScope.toggleLockAccount(row.entity.id)">
+
+        <span ng-if="row.entity.locked">
+          <i class="fa fa-unlock"></i>
+          <span translate>FORM.BUTTONS.UNLOCK</span>
+        </span>
+
+        <span ng-if="!row.entity.locked">
+          <i class="fa fa-lock"></i>
+          <span translate>FORM.BUTTONS.LOCK</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a href data-method="toggle-hidden"
+        ng-click="grid.appScope.toggleHideAccount(row.entity.id)">
+
+        <span ng-if="row.entity.hidden">
+          <i class="fa fa-eye"></i>
+          <span translate>FORM.BUTTONS.UNHIDE</span>
+        </span>
+
+        <span ng-if="!row.entity.hidden">
+          <i class="fa fa-eye-slash"></i>
+          <span translate>FORM.BUTTONS.HIDE</span>
+        </span>
+      </a>
+    </li>
+
+    <li class="divider"></li>
+
+    <li>
+      <a href data-method="delete-record" ng-click="grid.appScope.remove(row.entity.id)">
+        <span class="text-danger">
+          <i class="fa fa-trash"></i> <span translate>FORM.BUTTONS.DELETE</span>
+        </span>
+      </a>
+    </li>
+</div>

@@ -1,0 +1,22 @@
+<form name="RolesForm" bh-submit="UsersRolesCtrl.assignRolesToUser()">
+<div class="modal-header">
+    <ol class="headercrumb">
+      <li class="static" translate>FORM.LABELS.ROLES_FOR</li>
+      <li class="title">{{UsersRolesCtrl.user.display_name}}</li>
+    </ol>
+</div>
+<div class="modal-body">
+  <bh-checkbox-tree
+    is-flat-tree="true"
+    data="UsersRolesCtrl.roles"
+    id-key="uuid"
+    checked-ids="UsersRolesCtrl.selected"
+    on-change="UsersRolesCtrl.onChangeRoleSelection(data)">
+  </bh-checkbox-tree>
+</div>
+
+<div class="modal-footer text-right">
+  <button type="button" class='btn btn-default' ng-click="UsersRolesCtrl.close()" translate>FORM.BUTTONS.CLOSE</button>
+  <bh-loading-button loading-state="RolesForm.$loading"></bh-loading-button>
+</div>
+</form>

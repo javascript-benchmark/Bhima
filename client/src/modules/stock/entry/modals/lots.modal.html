@@ -1,0 +1,128 @@
+<form
+  name="FindForm"
+  bh-submit="$ctrl.submit(FindForm)"
+  ng-model-options="{ 'debounce' : { 'default' : 200, 'blur' : 0 }}"
+  novalidate>
+
+  <div class="modal-header">
+    <ol class="headercrumb">
+      <li class="static" translate>TREE.STOCK</li>
+      <li class="static" translate>STOCK.ENTRY</li>
+      <li class="title">{{ $ctrl.stockLine.label }}</li>
+    </ol>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="row" style="margin-top: 0.5em; margin-bottom: 0.5em">
+      <div class="col-xs-12">
+        <div>
+          <span class="text-bold" translate>STOCK.ENTRY_DATE</span> :
+          {{ $ctrl.entryDate | date:$ctrl.bhConstants.dates.format }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" translate>FORM.LABELS.GLOBAL_QUANTITY</label>
+
+      <div ng-if="$ctrl.entryType === 'transfer_reception'">
+        <span class="form-control-static">{{ $ctrl.stockLine.quantity }}</span>
+      </div>
+
+      <input
+        ng-if="$ctrl.isCostEditable"
+        class="form-control"
+        type="number"
+        ng-change="$ctrl.onChangeQuantity()"
+        ng-model="$ctrl.stockLine.quantity"
+        ng-model-options="{ '*' : '$inherit' }"
+        min="0">
+    </div>
+
+    <div class="form-group">
+      <label translate>STOCK.UNIT_COST</label>
+
+      <div ng-if="!$ctrl.isCostEditable">
+        <span class="form-control-static">{{ $ctrl.stockLine.unit_cost }}  {{ $ctrl.currency.label }} </span>
+      </div>
+
+      <div ng-if="$ctrl.isCostEditable" class="input-group">
+        <input
+          class="form-control"
+          type="number"
+          required
+          min="0"
+          ng-change="$ctrl.onChangeUnitCost()"
+          ng-model="$ctrl.stockLine.unit_cost"
+          ng-model-options="{ '*' : '$inherit' }">
+        <span class="input-group-addon">{{ $ctrl.currency.symbol }}</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 5px;">
+      <div class="checkbox">
+        <label>
+          <input
+            id="enableFastInsert"
+            ng-model="$ctrl.enableFastInsert"
+            type="checkbox"
+            ng-true-value="1"
+            ng-false-value="0">
+          <span translate>LOTS.ENABLE_FAST_INSERT</span>
+        </label>
+        <p class="help-block" translate>LOTS.ENABLE_FAST_INSERT_DESCRIPTION</p>
+      </div>
+
+      <div style="margin-bottom: 5px;" bh-has-permission="$ctrl.bhConstants.actions.EDIT_LOT">
+        <div class="checkbox">
+          <label>
+            <input
+              id="editExpirationDates"
+              type="checkbox"
+              ng-model="$ctrl.editExpirationDates"
+              ng-change="$ctrl.onExpDateEditable()"
+              ng-true-value="1"
+              ng-false-value="0">
+            <span translate>LOTS.ENABLE_CORRECTING_LOT_EXPIRATION_DATES</span>
+          </label>
+          <p class="help-block" translate>LOTS.ENABLE_CORRECTING_LOT_EXPIRATION_DATES_DESCRIPTION</p>
+        </div>
+
+        <bh-add-item callback="$ctrl.form.addItem()" disable="true">
+      </bh-add-item>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div
+          id="LotsGrid"
+          ui-grid="$ctrl.gridOptions"
+          ui-grid-auto-resize
+          ui-grid-resize-columns>
+        </div>
+        <bh-grid-loading-indicator
+          loading-state="$ctrl.loading"
+          empty-state="$ctrl.gridOptions.data.length === 0"
+          error-state="$ctrl.hasError">
+        </bh-grid-loading-indicator>
+      </div>
+    </div>
+
+    <div ng-if="$ctrl.errors.length > 0" class="alert alert-danger" style="margin-top: 10px;">
+      <p ng-repeat="error in $ctrl.errors">
+        <b><i class="fa fa-warning"></i></b> <span translate>{{error}}</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$ctrl.cancel()" data-method="cancel" translate>
+      FORM.BUTTONS.CLOSE
+    </button>
+
+    <bh-loading-button loading-state="FindForm.$loading">
+      <span translate>FORM.BUTTONS.SUBMIT</span>
+    </bh-loading-button>
+  </div>
+</form>

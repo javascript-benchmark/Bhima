@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <ol class="headercrumb">
+    <li class="static"><span translate>FORM.LABELS.STATUS</span> <span translate>PURCHASES.ORDER</span></li>
+    <li class="title">{{ $ctrl.purchase.reference }}</li>
+  </ol>
+</div>
+
+<form
+  name="ModalForm"
+  bh-submit="$ctrl.submit($ctrl.status)"
+  data-modal="purchase-status"
+  novalidate>
+
+<div class="modal-body">
+  <div class="form-group" ng-if="$ctrl.purchase.status_id !== 2">
+    <label class="text-action">
+      <input type="radio" name="status" ng-model="$ctrl.status" value="2" ng-disabled="$ctrl.isStored">
+      <span class="label label-primary" translate>PURCHASES.STATUS.CONFIRMED</span>
+      <p translate>PURCHASES.STATUS.CONFIRMED_DESC</p>
+    </label>
+  </div>
+
+  <div class="form-group" ng-if="$ctrl.purchase.status_id !== 1">
+    <label class="text-action">
+      <input type="radio" name="status" ng-model="$ctrl.status" value="1" ng-disabled="$ctrl.isStored">
+      <span class="label label-default" translate>PURCHASES.STATUS.WAITING_CONFIRMATION</span>
+      <p translate>PURCHASES.STATUS.WAITING_CONFIRMATION_DESC</p>
+    </label>
+  </div>
+
+  <div class="form-group" ng-if="$ctrl.purchase.status_id !== 5">
+    <label class="text-action">
+      <input type="radio" name="status" ng-model="$ctrl.status" value="5"  ng-disabled="$ctrl.isStored">
+      <span class="label label-danger" translate>PURCHASES.STATUS.CANCELLED</span>
+      <p translate>PURCHASES.STATUS.CANCELLED_DESC</p>
+    </label>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-default"
+    ng-click="$ctrl.close()"
+    data-method="close"
+    translate>
+    FORM.BUTTONS.CLOSE
+  </button>
+
+  <bh-loading-button loading-state="ModalForm.$loading">
+    <span translate>FORM.BUTTONS.SUBMIT</span>
+  </bh-loading-button>
+</div>
+</form>

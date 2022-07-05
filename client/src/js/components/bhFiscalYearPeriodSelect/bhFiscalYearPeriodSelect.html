@@ -1,0 +1,12 @@
+<div ng-form="FiscalPeriodForm" bh-fiscal-year-period-select ng-model-options="{ updateOn: 'default' }">
+  <bh-fiscal-year-select
+    on-select-fiscal-callback="$ctrl.onSelectFiscalYear(fiscalYear)"
+    fiscal-id="$ctrl.selected.fiscal.id">
+  </bh-fiscal-year-select>
+
+  <bh-period-selection
+    fiscal-year-id="$ctrl.selected.fiscal.id"
+    period-id="$ctrl.selected.period.id"
+    on-select-callback="$ctrl.onSelectPeriod(period)">
+  </bh-period-selection>
+</div>

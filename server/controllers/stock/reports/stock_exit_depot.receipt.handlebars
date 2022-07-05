@@ -1,0 +1,108 @@
+{{> head title="STOCK.RECEIPT.EXIT_DEPOT" }}
+
+<!-- body  -->
+<div class="container" style="font-size: 0.9em;">
+
+  <header>
+    <!-- headings  -->
+    {{> stockReceiptHeader
+      title="STOCK.RECEIPT.EXIT_DEPOT"
+      entity=exit.details.depot_name
+      reference=exit.details.document_reference
+      barcode=exit.details.barcode
+    }}
+
+    <!-- summary  -->
+    <div class="row receipt-summary">
+      <div class="col-xs-6">
+        <h4>{{translate 'STOCK.FROM'}}</h4>
+        <span class="text-capitalize">{{translate 'STOCK.DEPOT'}}</span>: <strong>{{exit.details.depot_name}}</strong> <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.DOCUMENT'}}</span>: <strong>{{exit.details.document_reference}}</strong> <br>
+      </div>
+      <div class="col-xs-6">
+        <h4>{{translate 'STOCK.TO'}}</h4>
+        <span class="text-capitalize">{{translate 'STOCK.DEPOT'}}</span>: <strong>{{exit.details.otherDepotName}}</strong> <br>
+        <span class="text-capitalize">{{translate 'FORM.LABELS.DOCUMENT'}}</span>: <strong>{{exit.details.document_reference}}</strong> <br>
+
+        {{#if exit.details.document_requisition}}
+          <span>{{translate 'FORM.LABELS.REQUISITION_REFERENCE'}}</span>: <strong>{{exit.details.document_requisition}}</strong> <br>
+        {{/if}}
+
+      </div>
+    </div>
+
+    <div class="row receipt-summary">
+      <div class="col-xs-6">
+        <span class="text-capitalize">{{translate 'FORM.LABELS.DATE'}}</span>: {{date exit.details.date}} <br>
+        <span class="text-capitalize">{{translate "TABLE.COLUMNS.CREATED_BY"}}</span>: {{exit.details.user_display_name}} <br>
+      </div>
+      <div class="col-xs-6">
+        <span class="text-capitalize">{{translate 'STOCK.INVENTORY'}}</span>: <strong>{{rows.length}} {{translate 'STOCK.ITEMS'}}</strong> <br>
+      </div>
+    </div>
+  </header>
+
+  <div class="receipt-summary" style="min-height: 8em;">
+    <strong>{{translate 'FORM.LABELS.NOTE'}}</strong><br>
+    {{exit.details.description}}
+  </div>
+
+  <!-- list of data  -->
+  <table class="table table-condensed table-bordered table-report">
+    <thead>
+      <tr>
+        <th>{{translate 'STOCK.CODE'}}</th>
+        <th>{{translate 'STOCK.INVENTORY'}}</th>
+        <th>{{translate 'STOCK.LOT'}}</th>
+        <th>{{translate 'STOCK.INVENTORY_UNIT'}}</th>
+        <th>{{translate 'STOCK.EXPIRATION'}}</th>
+        <th>{{translate 'STOCK.QUANTITY'}}</th>
+        <th>{{translate 'STOCK.UNIT_COST'}}</th>
+        <th class="text-center">{{translate 'TABLE.COLUMNS.TOTAL_COST'}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each rows}}
+        <tr>
+          <td>{{code}}</td>
+          <td>{{text}}</td>
+          <td>{{label}}</td>
+          <td>{{unit}}</td>
+          <td>{{date expiration_date}}</td>
+          <td class="text-right">{{quantity}}</td>
+          <td class="text-right">{{currency unit_cost ../metadata.enterprise.currency_id}}</td>
+          <td class="text-right">{{currency total ../metadata.enterprise.currency_id}}</td>
+        </tr>
+      {{else}}
+        {{> emptyTable columns=8}}
+      {{/each}}
+    </tbody>
+    <tfoot>
+      <tr style="font-weight: bold;">
+        <td colspan="9">
+          <span>{{rows.length}} {{translate 'STOCK.ITEMS'}}</span>
+          <span class="pull-right">{{currency totals.cost metadata.enterprise.currency_id}}</span>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <br>
+
+  <footer>
+    <div class="row">
+      <div class="col-xs-6">
+        <h4 class="text-center">{{translate 'REPORT.FOOTER.APPROVED_BY'}}</h4>
+        <hr>
+      </div>
+
+      <div class="col-xs-6">
+        <h4 class="text-center">{{translate 'REPORT.FOOTER.DEPOT_MANAGER'}}</h4>
+        <hr>
+      </div>
+    </div>
+  </footer>
+  {{#if metadata.enterprise.settings.enable_barcodes}}
+    <script>JsBarcode('.barcode').init();</script>
+  {{/if}}
+</div>

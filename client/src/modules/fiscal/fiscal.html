@@ -1,0 +1,64 @@
+<div class="flex-header">
+  <div class="bhima-title">
+
+    <ol class="headercrumb">
+      <li class="static" translate>TREE.FINANCE </li>
+      <li
+        class="title"
+        ng-if="FiscalCtrl.state.current.name === 'fiscal.list'"
+        translate>TREE.FISCAL_YEAR
+      </li>
+
+      <!-- fiscal year list with link -->
+      <li ng-if="FiscalCtrl.state.current.name !== 'fiscal.list'">
+        <a ui-sref="fiscal.list" translate>TREE.FISCAL_YEAR</a>
+      </li>
+
+      <!-- edit fiscal year -->
+      <li ng-if="FiscalCtrl.state.current.name === 'fiscal.update'" class="title">
+        {{ FiscalCtrl.state.params.label }}
+        <span class="label label-info" translate>FORM.LABELS.EDIT</span>
+      </li>
+
+      <!-- create fiscal year -->
+      <li ng-if="FiscalCtrl.state.current.name === 'fiscal.create'" class="title">
+        <span class="label label-success" translate>FORM.LABELS.CREATE</span>
+      </li>
+
+      <!-- opening balance -->
+      <li ng-if="FiscalCtrl.state.current.name === 'fiscal.openingBalance'">
+        <a ui-sref="fiscal.update({ id: FiscalCtrl.state.params.id })">{{ FiscalCtrl.state.params.label }}</a>
+      </li>
+      <li ng-if="FiscalCtrl.state.current.name === 'fiscal.openingBalance'" class="title">
+        <span translate>FISCAL.OPENING_BALANCE</span>
+      </li>
+
+      <!-- closing balance -->
+      <li ng-if="FiscalCtrl.state.current.name === 'fiscal.closingBalance'">
+        <a ui-sref="fiscal.update({ id: FiscalCtrl.state.params.id })">{{ FiscalCtrl.state.params.label }}</a>
+      </li>
+      <li ng-if="FiscalCtrl.state.current.name === 'fiscal.closingBalance'" class="title">
+        <span translate>FISCAL.CLOSING_BALANCE</span>
+      </li>
+    </ol>
+
+    <div class="toolbar">
+      <div class="toolbar-item">
+        <a
+          ng-if="FiscalCtrl.state.current.name==='fiscal.list'"
+          class="btn btn-default text-capitalize"
+          data-method="create"
+          ui-sref="fiscal.create">
+          <i class="fa fa-plus"></i>
+          <span translate> FISCAL.CREATE_FISCAL_YEAR </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flex-content">
+  <div class="container">
+    <ui-view></ui-view>
+  </div>
+</div>

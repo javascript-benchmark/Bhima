@@ -1,0 +1,53 @@
+<form name="ActionForm" novalidate>
+  <div class="modal-header">
+    <i class="fa fa-list"></i>
+    <span ng-if="$ctrl.action==='add'" translate>INVENTORY.ADD_UNIT</span>
+    <span ng-if="$ctrl.action==='edit'" translate>INVENTORY.EDIT_UNIT</span>
+  </div>
+
+  <div class="modal-body">
+    <div class="form-group"
+      ng-class="{ 'has-error' : ActionForm.$submitted && ActionForm.text.$invalid }">
+      <label class="control-label" translate>FORM.LABELS.LABEL</label>
+      <input ng-model="$ctrl.session.text"
+        class="form-control"
+        type="text"
+        name="text"
+        translate-attr="{ placeholder : 'FORM.PLACEHOLDERS.NAME' }"
+        required>
+      <div class="help-block" ng-messages="ActionForm.text.$error" ng-show="ActionForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+
+    <div class="form-group"
+      ng-class="{ 'has-error' : ActionForm.$submitted && ActionForm.abbreviation.$invalid }">
+      <label class="control-label" translate>FORM.LABELS.ABBREVIATION</label>
+      <input
+        ng-model="$ctrl.session.abbr"
+        class="form-control"
+        type="text"
+        name="abbreviation"
+        translate-attr="{ placeholder : 'FORM.PLACEHOLDERS.ABBREVIATION' }"
+        required>
+      <div class="help-block" ng-messages="ActionForm.abbreviation.$error" ng-show="ActionForm.$submitted">
+        <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button"
+      class="btn btn-default btn-sm"
+      ng-click="$ctrl.cancel()"
+      translate>
+      FORM.BUTTONS.CANCEL
+    </button>
+    <button type="submit"
+      class="btn btn-primary btn-sm"
+      ng-click="$ctrl.submit(ActionForm)"
+      data-method="submit">
+      <span translate>FORM.BUTTONS.SUBMIT
+    </button>
+  </div>
+</form>

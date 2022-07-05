@@ -1,0 +1,39 @@
+<div class="flex-header">
+  <div class="bhima-title">
+    <ol class="headercrumb">
+      <li class="static" translate> TREE.ADMIN </li>
+      <li class="title" translate> PAYROLL_RUBRIC.CONFIGURATION </li>
+    </ol>
+
+    <div class="toolbar">
+      <div class="toolbar-item">
+        <button class="btn btn-default text-capitalize" ui-sref="configurationRubric.create" data-method="create">
+          <span class="fa fa-plus"></span> <span class="hidden-xs" translate>FORM.BUTTONS.ADD_RUBRIC_CONFIGURATION</span>
+        </button>
+      </div>
+
+      <bh-filter-toggle
+        on-toggle="ConfigurationCtrl.toggleFilter()">
+      </bh-filter-toggle>
+    </div>
+  </div>
+</div>
+
+<!-- main content -->
+<div class="flex-content">
+  <div class="container-fluid">
+    <div
+      id="rubric-grid"
+      class="grid-full-height"
+      ui-grid="ConfigurationCtrl.gridOptions"
+      ui-grid-auto-resize
+      ui-grid-resize-columns>
+
+      <bh-grid-loading-indicator
+        loading-state="ConfigurationCtrl.loading"
+        empty-state="ConfigurationCtrl.gridOptions.data.length === 0"
+        error-state="ConfigurationCtrl.hasError">
+      </bh-grid-loading-indicator>
+    </div>
+  </div>
+</div>

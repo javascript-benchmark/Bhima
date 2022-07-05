@@ -1,0 +1,121 @@
+<form
+  name="ModalForm"
+  ng-submit="$ctrl.submit(ModalForm)"
+  data-modal="invoice-search"
+  novalidate>
+
+  <div class="modal-header">
+    <ol class="headercrumb">
+      <li class="static" translate>FORM.INFO.INVOICES</li>
+      <li class="title" translate>FORM.INFO.SEARCH</li>
+    </ol>
+  </div>
+
+  <div class="modal-body search-modal">
+    <uib-tabset>
+      <uib-tab index="0" heading="{{ 'FORM.LABELS.SEARCH_QUERIES' | translate}}" data-custom-filter-tab>
+        <!-- acting body class="tab-body" -->
+        <div class="tab-body">
+
+          <!-- filter by project -->
+          <bh-project-select
+            project-id="$ctrl.searchQueries.project_id"
+            name="project_id"
+            on-select-callback="$ctrl.onSelectProject(project)">
+            <bh-clear on-clear="$ctrl.clear('project_id')"></bh-clear>
+          </bh-project-select>
+
+          <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.reference.$invalid }">
+            <label class="control-label" translate>FORM.LABELS.REFERENCE</label>
+            <bh-clear on-clear="$ctrl.clear('reference')"></bh-clear>
+            <input type="text" class="form-control" name="reference" ng-model="$ctrl.searchQueries.reference">
+            <div class="help-block" ng-messages="ModalForm.reference.$error" ng-show="ModalForm.$submitted">
+              <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" translate>FORM.LABELS.REFERENCE_PATIENT</label>
+            <bh-clear on-clear="$ctrl.clear('patientReference')"></bh-clear>
+            <input type="text" class="form-control" ng-model="$ctrl.searchQueries.patientReference"/>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label"><span translate>FORM.INFO.CREDIT_NOTE</span></label>
+            <bh-clear on-clear="$ctrl.clear('reversed')"></bh-clear>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsReversal" value="0" ng-model="$ctrl.searchQueries.reversed">
+                <span translate>INVOICE_REGISTRY.EXCLUDE_REVERSE</span>
+              </label>
+            </div>
+
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsReversal" value="1" ng-model="$ctrl.searchQueries.reversed">
+                <span translate>INVOICE_REGISTRY.INCLUDE_REVERSE</span>
+              </label>
+            </div>
+          </div>
+
+          <bh-service-select
+            service-uuid="$ctrl.searchQueries.service_uuid"
+            name="service_uuid"
+            on-select-callback="$ctrl.onSelectService(service)">
+            <bh-clear on-clear="$ctrl.clear('service_uuid')"></bh-clear>
+          </bh-service-select>
+
+          <bh-debtor-group-select
+            debtor-group-uuid = "$ctrl.searchQueries.debtor_group_uuid"
+            on-select-callback = "$ctrl.onSelectDebtor(debtorGroup)">
+              <bh-clear on-clear="$ctrl.clear('debtor_group_uuid')"></bh-clear>
+          </bh-debtor-group-select>
+
+          <div class="form-group" ng-class="{ 'has-error' : ModalForm.$submitted && ModalForm.description.$invalid }">
+            <label class="control-label" translate>FORM.LABELS.DESCRIPTION</label>
+            <bh-clear on-clear="$ctrl.clear('description')"></bh-clear>
+            <textarea ng-model="$ctrl.searchQueries.description" class="form-control" rows="2"></textarea>
+          </div>
+
+          <bh-user-select
+            user-id="$ctrl.searchQueries.user_id"
+            name="user_id"
+            on-select-callback="$ctrl.onSelectUser(user)">
+            <bh-clear on-clear="$ctrl.clear('user_id')"></bh-clear>
+          </bh-user-select>
+        </div>
+      </uib-tab>
+
+      <uib-tab index="1" heading="{{ 'FORM.LABELS.DEFAULTS' | translate }}" data-default-filter-tab>
+        <div class="tab-body">
+          <!-- period selection -->
+          <!-- start period selection component -->
+          <bh-period-select
+            default-period="{{$ctrl.filters.period}}"
+            on-select-callback="$ctrl.onSelectPeriod(period)">
+          </bh-period-select>
+          <!-- end period selection component -->
+
+          <div class="form-group" ng-class="{ 'has-error' : ModalForm.limit.$invalid }">
+            <label class="control-label" translate>FORM.LABELS.LIMIT</label>
+            <input name="limit" min="0" type="number" bh-integer bh-max-integer class="form-control" ng-model="$ctrl.defaultQueries.limit" ng-change="$ctrl.onSelectLimit($ctrl.defaultQueries.limit)">
+
+            <div class="help-block" ng-messages="ModalForm.limit.$error">
+              <div ng-messages-include="modules/templates/messages.tmpl.html"></div>
+            </div>
+          </div>
+        </div>
+      </uib-tab>
+
+    </uib-tabset>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$ctrl.cancel()" translate>
+      FORM.BUTTONS.CLOSE
+    </button>
+    <button class="btn btn-primary" type="submit" data-method="submit" translate>
+      FORM.BUTTONS.SUBMIT
+    </button>
+  </div>
+</form>

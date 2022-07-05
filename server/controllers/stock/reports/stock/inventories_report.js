@@ -1,0 +1,72 @@
+const {
+  _, ReportManager, formatFilters, Stock, STOCK_INVENTORIES_REPORT_TEMPLATE,
+} = require('../common');
+
+/**
+ * @method stockInventoriesReport
+ *
+ * @description
+ * This method builds the stock report as either a JSON, PDF, or HTML
+ * file to be sent to the client.
+ *
+ * GET /reports/stock/inventories
+ */
+async function stockInventoriesReport(req, res, next) {
+  const monthAverageConsumption = req.session.stock_settings.month_average_consumption;
+  const averageConsumptionAlgo = req.session.stock_settings.average_consumption_algo;
+
+  const data = {};
+
+  const optionReport = _.extend({}, req.query, {
+    filename : 'TREE.STOCK_INVENTORY',
+    title : 'TREE.STOCK_INVENTORY',
+  });
+
+  try {
+    const options = req.query;
+    delete options.label;
+
+    const filters = formatFilters(options);
+
+    if (req.session.stock_settings.enable_strict_depot_permission) {
+      options.check_user_id = req.session.user.id;
+    }
+
+    const inventoriesParameters = [options, monthAverageConsumption, averageConsumptionAlgo];
+    const report = new ReportManager(STOCK_INVENTORIES_REPORT_TEMPLATE, req.session, optionReport);
+    const rows = await Stock.getInventoryQuantityAndConsumption(...inventoriesParameters);
+
+    rows.forEach(row => {
+      // remove the CMM object to prevent MS Excel from complaining
+      delete row.cmms;
+      delete row.NO_CONSUMPTION;
+    });
+
+    data.rows = rows;
+    data.filters = filters;
+    data.csv = rows;
+
+    data.dateTo = options.dateTo;
+
+    // group by depot
+    const groupedDepots = _.groupBy(rows, d => d.depot_text);
+    const depots = {};
+
+    Object.keys(groupedDepots).sort(compare).forEach(d => {
+      depots[d] = _.sortBy(groupedDepots[d], line => String(line.text).toLocaleLowerCase());
+    });
+
+    data.depots = depots;
+
+    const result = await report.render(data);
+    res.set(result.headers).send(result.report);
+  } catch (e) {
+    next(e);
+  }
+}
+
+function compare(a, b) {
+  return a.localeCompare(b);
+}
+
+module.exports = stockInventoriesReport;

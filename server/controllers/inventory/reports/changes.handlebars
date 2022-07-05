@@ -1,0 +1,73 @@
+{{> head title="REPORT.INVENTORY_CHANGE.TITLE"}}
+
+<body>
+  <!-- header  -->
+ {{> header}}
+
+  <h3 class="text-center">
+    <u>{{ translate 'REPORT.INVENTORY_CHANGE.TITLE' }} </u>
+  </h3>
+  <h3 class="text-center">
+    <small>{{date dateFrom }} - {{date dateTo}}</small>
+  </h3>
+
+  <table class="table table-report table-condensed">
+    <thead>
+      <tr>
+        <th>{{translate "FORM.LABELS.DATE"}}</th>
+        <th>{{translate "FORM.LABELS.USER"}}</th>
+        <th>{{translate "FORM.LABELS.LABEL"}}</th>
+        <th>{{translate "INVENTORY.PREVIOUS_VALUE"}}</th>
+        <th>{{translate "INVENTORY.UPDATED_VALUE"}}</th>
+      </tr>
+    </thead>
+
+    {{#each ./inventories as | inventory |}}
+      <tbody>
+        <tr>
+          <th colspan="4">
+            {{inventory.group_name}} <span>&#x7c;</span> {{inventory.code}} - {{inventory.label}}
+          </th>
+          <th colspan="1" class="text-right">
+            ({{inventory.logs.length}} {{translate "INVENTORY.CHANGES"}})
+          </th>
+        </tr>
+
+        {{#each inventory.logs as | log |}}
+          <tr>
+            <td>{{timestamp log.date}}</td>
+            <td>{{log.userName}}</td>
+            <td>{{translate log.col}}</td>
+            <td class="text-right">{{log.value.from}}</td>
+            <td class="text-right">{{log.value.to}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    {{else}}
+      <tbody>
+        {{> emptyTable columns=5 }}
+      </tbody>
+    {{/each}}
+  </table>
+
+
+  <br />
+
+  <table style="max-width:50%" class="table table-condensed table-report">
+    <thead>
+      <tr>
+        <th>{{translate "FORM.LABELS.USER"}}</th>
+        <th>{{translate "INVENTORY.CHANGES"}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each userChanges as | row |}}
+        <tr>
+          <td>{{row.user}}</td>
+          <td class="text-right">{{row.numberOfChanges}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+</body>
