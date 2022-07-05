@@ -283,10 +283,10 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@types/angular@^1.6.25", "@types/angular@^1.8.2":
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.8.2.tgz#35d357097a853147a1b65ad34670322ca4e56b69"
-  integrity sha512-V0Hgx2Q3wFNcrrmx8zVepdasDuwnK4lqQFe0Zr9Ll3DoTJIuhKOpyfHC6KuVDBXJGgTkMKtELbvDe9crIkSGzg==
+"@types/angular@^1.6.25", "@types/angular@^1.8.4":
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.8.4.tgz#a2cc163e508389c51d4c4119ebff6b9395cec472"
+  integrity sha512-wPS/ncJWhyxJsndsW1B6Ta8D4mi97x1yItSu+rkLDytU3oRIh2CFAjMuJceYwFAh9+DIohndWM0QBA9OU2Hv0g==
 
 "@types/cacheable-request@^6.0.1":
   version "6.0.1"
@@ -584,10 +584,10 @@ angular-ui-grid@^4.11.0:
   dependencies:
     angular ">=1.4.0 1.8.x"
 
-"angular@>=1.2.22 <2", "angular@>=1.4.0 1.8.x", angular@^1.8.0, angular@^1.8.2:
-  version "1.8.2"
-  resolved "https://registry.npmjs.org/angular/-/angular-1.8.2.tgz#5983bbb5a9fa63e213cb7749199e0d352de3a2f1"
-  integrity sha512-IauMOej2xEe7/7Ennahkbb5qd/HFADiNuLSESz9Q27inmi32zB0lnAsFeLEWcox3Gd1F6YhNd1CP7/9IukJ0Gw==
+"angular@>=1.2.22 <2", "angular@>=1.4.0 1.8.x", angular@^1.8.0, angular@^1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.8.3.tgz#851ad75d5163c105a7e329555ef70c90aa706894"
+  integrity sha512-5qjkWIQQVsHj4Sb5TcEs4WZWpFeVFHXwxEBHUhrny41D8UrBAd6T/6nPPAsLngJCReIOqi95W3mxdveveutpZw==
 
 ansi-align@^3.0.0:
   version "3.0.0"
