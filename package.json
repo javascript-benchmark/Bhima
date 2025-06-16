@@ -78,7 +78,7 @@
     "jeremielodi"
   ],
   "dependencies": {
-    "@ima-worldhealth/coral": "^2.7.2",
+    "@ima-worldhealth/coral": "^2.15.0",
     "@ima-worldhealth/tree": "^2.3.2",
     "@types/angular": "^1.8.2",
     "@uirouter/angularjs": "^1.0.29",
@@ -133,7 +133,7 @@
     "p-retry": "^4.6.1",
     "q": "^1.5.1",
     "stream-to-promise": "^3.0.0",
-    "tempy": "^1.0.1",
+    "tempy": "^3.0.0",
     "typeface-open-sans": "^1.1.13",
     "ui-select": "0.17.1",
     "use-strict": "^1.0.1",
